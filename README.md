@@ -3,7 +3,7 @@
 **📋 Descrição do Projeto:** <br>
 Este repositório centraliza os projetos, desafios e artefatos desenvolvidos durante o Programa de Bolsas (PB) da Compass UOL. O objetivo principal é documentar a evolução técnica e a aplicação prática de conhecimentos em tecnologias de ponta, preparando a bolsista para os desafios da economia digital e da reinvenção empresarial.
 
-**🎓 Sobre o Programa: **<br>
+**🎓 Sobre o Programa:** <br>
 A Compass Academy atua como uma "AI powerhouse", oferecendo um ambiente de aprendizado intensivo com mentoria de profissionais experientes da companhia. O programa foca na modernização de habilidades em áreas críticas do mercado de TI.
 
 **📂 Estrutura do Repositório:** <br>
