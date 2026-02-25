@@ -1,0 +1,1072 @@
+{
+	"id": "5e9eb85b-9574-4996-85ad-543b8966f541",
+	"name": "compassuol serverest",
+	"timestamp": "2026-02-13T13:48:20.752Z",
+	"collection_id": "52265691-59c88389-383d-41e3-8d8c-d82ef1bf4a70",
+	"folder_id": 0,
+	"environment_id": "52265691-2fa37184-5dc7-4e2e-830c-926120ae6022",
+	"totalPass": 44,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2026-02-13T13:48:10.315Z",
+	"totalFail": 7,
+	"results": [
+		{
+			"id": "bf880a5d-494f-430d-a0e2-d4eacbdeecfb",
+			"name": "Novo usuário",
+			"url": "https://compassuol.serverest.dev/usuarios",
+			"time": 626,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status esperado é 201 (Novo) ou 400 (Já cadastrado)": true,
+				"Validar mensagem de retorno": true
+			},
+			"testPassFailCounts": {
+				"Status esperado é 201 (Novo) ou 400 (Já cadastrado)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem de retorno": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				626
+			],
+			"allTests": [
+				{
+					"Status esperado é 201 (Novo) ou 400 (Já cadastrado)": true,
+					"Validar mensagem de retorno": true
+				}
+			]
+		},
+		{
+			"id": "2f75dcbe-e4ea-40e2-bc84-10208dd1658f",
+			"name": "Já utilizado",
+			"url": "https://compassuol.serverest.dev/usuarios/id-qualquer-123",
+			"time": 187,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status deve ser 400 - E-mail já utilizado no PUT": true,
+				"Validar mensagem de e-mail duplicado": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 400 - E-mail já utilizado no PUT": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem de e-mail duplicado": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				187
+			],
+			"allTests": [
+				{
+					"Status deve ser 400 - E-mail já utilizado no PUT": true,
+					"Validar mensagem de e-mail duplicado": true
+				}
+			]
+		},
+		{
+			"id": "1abbf101-f7b3-46ef-9ca9-e3a233150127",
+			"name": "Email proibido",
+			"url": "https://compassuol.serverest.dev/usuarios/",
+			"time": 181,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Regra de Negócio: Bloquear domínios Gmail/Hotmail": false
+			},
+			"testPassFailCounts": {
+				"Regra de Negócio: Bloquear domínios Gmail/Hotmail": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				181
+			],
+			"allTests": [
+				{
+					"Regra de Negócio: Bloquear domínios Gmail/Hotmail": false
+				}
+			]
+		},
+		{
+			"id": "8723dbc2-0e5b-4d0a-a86b-52a720da4de7",
+			"name": "Deleta email proibido",
+			"url": "https://compassuol.serverest.dev/usuarios/HIVEPZO2IKbThYio",
+			"time": 185,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Limpeza: Remover usuário de teste": true
+			},
+			"testPassFailCounts": {
+				"Limpeza: Remover usuário de teste": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				185
+			],
+			"allTests": [
+				{
+					"Limpeza: Remover usuário de teste": true
+				}
+			]
+		},
+		{
+			"id": "27729744-5eb6-4280-a9d3-7f8c5aa55ff1",
+			"name": "Senha curta",
+			"url": "https://compassuol.serverest.dev/usuarios",
+			"time": 181,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Negativo: Sistema deve impedir senhas com menos de 5 caracteres": false
+			},
+			"testPassFailCounts": {
+				"Negativo: Sistema deve impedir senhas com menos de 5 caracteres": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				181
+			],
+			"allTests": [
+				{
+					"Negativo: Sistema deve impedir senhas com menos de 5 caracteres": false
+				}
+			]
+		},
+		{
+			"id": "97b1199e-7775-407e-8353-dc285ce7cf3d",
+			"name": "Deleta usuario senha curta",
+			"url": "https://compassuol.serverest.dev/usuarios/oAQz3V1gJHt0MGHE",
+			"time": 181,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Limpeza: Remover registro de teste": true
+			},
+			"testPassFailCounts": {
+				"Limpeza: Remover registro de teste": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				181
+			],
+			"allTests": [
+				{
+					"Limpeza: Remover registro de teste": true
+				}
+			]
+		},
+		{
+			"id": "3086fc92-5282-4389-978b-57ba0380e90b",
+			"name": "Senha longa",
+			"url": "https://compassuol.serverest.dev/usuarios",
+			"time": 246,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Negativo: Sistema deve impedir senhas com mais de 10 caracteres": false
+			},
+			"testPassFailCounts": {
+				"Negativo: Sistema deve impedir senhas com mais de 10 caracteres": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				246
+			],
+			"allTests": [
+				{
+					"Negativo: Sistema deve impedir senhas com mais de 10 caracteres": false
+				}
+			]
+		},
+		{
+			"id": "2618142e-84d4-4fc8-8fd2-96bc593290e6",
+			"name": "Deleta usuario senha longa",
+			"url": "https://compassuol.serverest.dev/usuarios/GgwoJhCE2Z23mTLt",
+			"time": 183,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Limpeza: Remover registro de teste": true
+			},
+			"testPassFailCounts": {
+				"Limpeza: Remover registro de teste": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				183
+			],
+			"allTests": [
+				{
+					"Limpeza: Remover registro de teste": true
+				}
+			]
+		},
+		{
+			"id": "f98fb0a4-d94a-4f51-92a7-692fd94b3977",
+			"name": "Senha intermediária",
+			"url": "https://compassuol.serverest.dev/usuarios",
+			"time": 187,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status deve ser 201 - Senha de 6 caracteres aceita": true,
+				"Validar se o cadastro foi concluído": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 201 - Senha de 6 caracteres aceita": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar se o cadastro foi concluído": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				187
+			],
+			"allTests": [
+				{
+					"Status deve ser 201 - Senha de 6 caracteres aceita": true,
+					"Validar se o cadastro foi concluído": true
+				}
+			]
+		},
+		{
+			"id": "4b2a1f1b-d633-43eb-b775-7965c3705668",
+			"name": "Deleta usuario senha intermediaria",
+			"url": "https://compassuol.serverest.dev/usuarios/TNDPw2AFOXBzITxo",
+			"time": 202,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Limpeza: Remover usuário com senha de 6 caracteres": true
+			},
+			"testPassFailCounts": {
+				"Limpeza: Remover usuário com senha de 6 caracteres": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				202
+			],
+			"allTests": [
+				{
+					"Limpeza: Remover usuário com senha de 6 caracteres": true
+				}
+			]
+		},
+		{
+			"id": "1122a182-7937-46b6-b970-aeed7b6f7d75",
+			"name": "Duplicado",
+			"url": "https://compassuol.serverest.dev/usuarios",
+			"time": 176,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status deve ser 400 - E-mail Duplicado": true,
+				"Mensagem de erro deve ser correta": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 400 - E-mail Duplicado": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Mensagem de erro deve ser correta": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				176
+			],
+			"allTests": [
+				{
+					"Status deve ser 400 - E-mail Duplicado": true,
+					"Mensagem de erro deve ser correta": true
+				}
+			]
+		},
+		{
+			"id": "15e7707a-f304-40e6-a053-fcb18f1f38e0",
+			"name": "PUT",
+			"url": "https://compassuol.serverest.dev/usuarios/idinexistente",
+			"time": 185,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status deve ser 201 - Criado (Regra: PUT cria se ID não existe)": true,
+				"Validar mensagem de sucesso": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 201 - Criado (Regra: PUT cria se ID não existe)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem de sucesso": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				185
+			],
+			"allTests": [
+				{
+					"Status deve ser 201 - Criado (Regra: PUT cria se ID não existe)": true,
+					"Validar mensagem de sucesso": true
+				}
+			]
+		},
+		{
+			"id": "8c2e261a-a134-42d8-bc63-88a9ee42fb60",
+			"name": "Delete put",
+			"url": "https://compassuol.serverest.dev/usuarios/c7knaVMrvdVOVZ1i",
+			"time": 186,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Limpeza: Remover registro criado via PUT": true
+			},
+			"testPassFailCounts": {
+				"Limpeza: Remover registro criado via PUT": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				186
+			],
+			"allTests": [
+				{
+					"Limpeza: Remover registro criado via PUT": true
+				}
+			]
+		},
+		{
+			"id": "87a41d0b-1e74-48d8-8bef-618d61fd66a9",
+			"name": "Deleta usuário",
+			"url": "https://compassuol.serverest.dev/usuarios/WasxcVcETUde0sph",
+			"time": 180,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status deve ser 200 - OK": true,
+				"Validar mensagem de retorno do DELETE": true,
+				"Validar se não há erro de dependência (Carrinho)": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 200 - OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem de retorno do DELETE": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar se não há erro de dependência (Carrinho)": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				180
+			],
+			"allTests": [
+				{
+					"Status deve ser 200 - OK": true,
+					"Validar mensagem de retorno do DELETE": true,
+					"Validar se não há erro de dependência (Carrinho)": true
+				}
+			]
+		},
+		{
+			"id": "c71dd874-46dd-414e-9080-d00d3a618420",
+			"name": "Lista usuarios",
+			"url": "https://compassuol.serverest.dev/usuarios",
+			"time": 241,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status deve ser 200": true,
+				"Validar se a lista de usuários não está vazia": true,
+				"Validar campos obrigatórios no primeiro usuário da lista": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar se a lista de usuários não está vazia": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar campos obrigatórios no primeiro usuário da lista": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				241
+			],
+			"allTests": [
+				{
+					"Status deve ser 200": true,
+					"Validar se a lista de usuários não está vazia": true,
+					"Validar campos obrigatórios no primeiro usuário da lista": true
+				}
+			]
+		},
+		{
+			"id": "bbbf9c0f-0b66-450b-b531-fbf0ca6499f4",
+			"name": "Fora de padrão",
+			"url": "https://compassuol.serverest.dev/usuarios",
+			"time": 179,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status deve ser 400 - E-mail inválido": true,
+				"Validar mensagem de erro de sintaxe": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 400 - E-mail inválido": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem de erro de sintaxe": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				179
+			],
+			"allTests": [
+				{
+					"Status deve ser 400 - E-mail inválido": true,
+					"Validar mensagem de erro de sintaxe": true
+				}
+			]
+		},
+		{
+			"id": "729b6a59-f053-4f8b-9f1d-bbf963b5e502",
+			"name": "Cria usuario teste",
+			"url": "https://compassuol.serverest.dev/usuarios",
+			"time": 211,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status esperado é 201 (Novo) ou 400 (Já cadastrado)": true,
+				"Validar mensagem de retorno": true
+			},
+			"testPassFailCounts": {
+				"Status esperado é 201 (Novo) ou 400 (Já cadastrado)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem de retorno": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				211
+			],
+			"allTests": [
+				{
+					"Status esperado é 201 (Novo) ou 400 (Já cadastrado)": true,
+					"Validar mensagem de retorno": true
+				}
+			]
+		},
+		{
+			"id": "f36239a6-0299-4f2e-abc1-5d886132f666",
+			"name": "Usuário invalido",
+			"url": "https://compassuol.serverest.dev/login",
+			"time": 181,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Status deve ser 401 - Unauthorized": true,
+				"Validar mensagem de erro para usuário inexistente": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 401 - Unauthorized": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem de erro para usuário inexistente": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				181
+			],
+			"allTests": [
+				{
+					"Status deve ser 401 - Unauthorized": true,
+					"Validar mensagem de erro para usuário inexistente": true
+				}
+			]
+		},
+		{
+			"id": "4423b57e-8d60-46c0-a1e5-a5f3a8ae40d8",
+			"name": "Senha Inválida",
+			"url": "https://compassuol.serverest.dev/login",
+			"time": 177,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Status deve ser 401 - Unauthorized": true,
+				"Validar mensagem de erro para usuário inexistente": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 401 - Unauthorized": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem de erro para usuário inexistente": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				177
+			],
+			"allTests": [
+				{
+					"Status deve ser 401 - Unauthorized": true,
+					"Validar mensagem de erro para usuário inexistente": true
+				}
+			]
+		},
+		{
+			"id": "c8aaa73f-f235-41ec-8148-c68d5c27a53c",
+			"name": "Usuário válido",
+			"url": "https://compassuol.serverest.dev/login",
+			"time": 186,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status deve ser 200": true,
+				"Validar e salvar token bearer": true,
+				"Validar mensagem de sucesso": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar e salvar token bearer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem de sucesso": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				186
+			],
+			"allTests": [
+				{
+					"Status deve ser 200": true,
+					"Validar e salvar token bearer": true,
+					"Validar mensagem de sucesso": true
+				}
+			]
+		},
+		{
+			"id": "655e970a-b2fc-49d1-9322-569bac738fb6",
+			"name": "Deleta usuario",
+			"url": "https://compassuol.serverest.dev/usuarios/cHiTxK47j1sRd4s0}",
+			"time": 180,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				180
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "47461622-4745-4d4a-8330-6c0886a66a95",
+			"name": "Cria usuario teste Copy",
+			"url": "https://compassuol.serverest.dev/usuarios",
+			"time": 177,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status esperado é 201 (Novo) ou 400 (Já cadastrado)": true,
+				"Validar mensagem de retorno": true
+			},
+			"testPassFailCounts": {
+				"Status esperado é 201 (Novo) ou 400 (Já cadastrado)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem de retorno": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				177
+			],
+			"allTests": [
+				{
+					"Status esperado é 201 (Novo) ou 400 (Já cadastrado)": true,
+					"Validar mensagem de retorno": true
+				}
+			]
+		},
+		{
+			"id": "8e0d1866-f51a-415b-b092-3914f91c7391",
+			"name": "Novo produto",
+			"url": "https://compassuol.serverest.dev/produtos",
+			"time": 228,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status deve ser 201": true,
+				"Validar mensagem e salvar ID do produto": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem e salvar ID do produto": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				228
+			],
+			"allTests": [
+				{
+					"Status deve ser 201": true,
+					"Validar mensagem e salvar ID do produto": true
+				}
+			]
+		},
+		{
+			"id": "a8af8d51-324e-4c0c-a8eb-76138cb47b02",
+			"name": "Produto via PUT",
+			"url": "https://compassuol.serverest.dev/produtos/1234567890abcdef",
+			"time": 224,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status deve ser 201 - Criado via PUT (Upsert)": true,
+				"Mensagem de cadastro realizado": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 201 - Criado via PUT (Upsert)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Mensagem de cadastro realizado": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				224
+			],
+			"allTests": [
+				{
+					"Status deve ser 201 - Criado via PUT (Upsert)": true,
+					"Mensagem de cadastro realizado": true
+				}
+			]
+		},
+		{
+			"id": "a587df39-b3dc-4108-81f2-392d963865de",
+			"name": "Ja existente",
+			"url": "https://compassuol.serverest.dev/produtos",
+			"time": 189,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status deve ser 400 - Bad Request": true,
+				"Validar mensagem de erro por nome duplicado": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 400 - Bad Request": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem de erro por nome duplicado": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				189
+			],
+			"allTests": [
+				{
+					"Status deve ser 400 - Bad Request": true,
+					"Validar mensagem de erro por nome duplicado": true
+				}
+			]
+		},
+		{
+			"id": "ee9d5bca-38f4-47a2-878f-149647cd01ed",
+			"name": "Nome duplicado",
+			"url": "https://compassuol.serverest.dev/produtos/Q0hWvx2Sembta2Rx",
+			"time": 200,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status deve ser 400 - Conflito de nome": true,
+				"Validar mensagem de erro": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 400 - Conflito de nome": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem de erro": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				200
+			],
+			"allTests": [
+				{
+					"Status deve ser 400 - Conflito de nome": true,
+					"Validar mensagem de erro": true
+				}
+			]
+		},
+		{
+			"id": "08f7504e-4f44-4213-9f7f-32516c9b1d5d",
+			"name": "Editar produto",
+			"url": "https://compassuol.serverest.dev/produtos/Q0hWvx2Sembta2Rx",
+			"time": 184,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status deve ser 200 - Sucesso na alteração": false,
+				"Validar mensagem de retorno do PUT": false
+			},
+			"testPassFailCounts": {
+				"Status deve ser 200 - Sucesso na alteração": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Validar mensagem de retorno do PUT": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				184
+			],
+			"allTests": [
+				{
+					"Status deve ser 200 - Sucesso na alteração": false,
+					"Validar mensagem de retorno do PUT": false
+				}
+			]
+		},
+		{
+			"id": "81f205aa-7b2d-4f1b-b3f6-1ecf4ebbb13e",
+			"name": "Deletar produto",
+			"url": "https://compassuol.serverest.dev/produtos/Q0hWvx2Sembta2Rx",
+			"time": 234,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status deve ser 200 - Registro excluído": true,
+				"Validar mensagem de exclusão": true
+			},
+			"testPassFailCounts": {
+				"Status deve ser 200 - Registro excluído": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validar mensagem de exclusão": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				234
+			],
+			"allTests": [
+				{
+					"Status deve ser 200 - Registro excluído": true,
+					"Validar mensagem de exclusão": true
+				}
+			]
+		},
+		{
+			"id": "ca940a7e-d71f-4d65-aa41-d99656005ce3",
+			"name": "Sem autenticação",
+			"url": "https://compassuol.serverest.dev/produtos/",
+			"time": 206,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status deve ser 401 - Unauthorized": false,
+				"Validar mensagem de erro de autenticação": false
+			},
+			"testPassFailCounts": {
+				"Status deve ser 401 - Unauthorized": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Validar mensagem de erro de autenticação": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				206
+			],
+			"allTests": [
+				{
+					"Status deve ser 401 - Unauthorized": false,
+					"Validar mensagem de erro de autenticação": false
+				}
+			]
+		},
+		{
+			"id": "e80beaf1-948e-4fd1-8aed-4ec7e657c31b",
+			"name": "Deleta usuário criado",
+			"url": "https://compassuol.serverest.dev/usuarios/cHiTxK47j1sRd4s0",
+			"time": 189,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				189
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 6272,
+	"collection": {
+		"requests": [
+			{
+				"id": "bf880a5d-494f-430d-a0e2-d4eacbdeecfb",
+				"method": "POST"
+			},
+			{
+				"id": "2f75dcbe-e4ea-40e2-bc84-10208dd1658f",
+				"method": "PUT"
+			},
+			{
+				"id": "1abbf101-f7b3-46ef-9ca9-e3a233150127",
+				"method": "POST"
+			},
+			{
+				"id": "8723dbc2-0e5b-4d0a-a86b-52a720da4de7",
+				"method": "DELETE"
+			},
+			{
+				"id": "27729744-5eb6-4280-a9d3-7f8c5aa55ff1",
+				"method": "POST"
+			},
+			{
+				"id": "97b1199e-7775-407e-8353-dc285ce7cf3d",
+				"method": "DELETE"
+			},
+			{
+				"id": "3086fc92-5282-4389-978b-57ba0380e90b",
+				"method": "POST"
+			},
+			{
+				"id": "2618142e-84d4-4fc8-8fd2-96bc593290e6",
+				"method": "DELETE"
+			},
+			{
+				"id": "f98fb0a4-d94a-4f51-92a7-692fd94b3977",
+				"method": "POST"
+			},
+			{
+				"id": "4b2a1f1b-d633-43eb-b775-7965c3705668",
+				"method": "DELETE"
+			},
+			{
+				"id": "1122a182-7937-46b6-b970-aeed7b6f7d75",
+				"method": "POST"
+			},
+			{
+				"id": "15e7707a-f304-40e6-a053-fcb18f1f38e0",
+				"method": "PUT"
+			},
+			{
+				"id": "8c2e261a-a134-42d8-bc63-88a9ee42fb60",
+				"method": "DELETE"
+			},
+			{
+				"id": "87a41d0b-1e74-48d8-8bef-618d61fd66a9",
+				"method": "DELETE"
+			},
+			{
+				"id": "c71dd874-46dd-414e-9080-d00d3a618420",
+				"method": "GET"
+			},
+			{
+				"id": "bbbf9c0f-0b66-450b-b531-fbf0ca6499f4",
+				"method": "POST"
+			},
+			{
+				"id": "729b6a59-f053-4f8b-9f1d-bbf963b5e502",
+				"method": "POST"
+			},
+			{
+				"id": "f36239a6-0299-4f2e-abc1-5d886132f666",
+				"method": "POST"
+			},
+			{
+				"id": "4423b57e-8d60-46c0-a1e5-a5f3a8ae40d8",
+				"method": "POST"
+			},
+			{
+				"id": "c8aaa73f-f235-41ec-8148-c68d5c27a53c",
+				"method": "POST"
+			},
+			{
+				"id": "655e970a-b2fc-49d1-9322-569bac738fb6",
+				"method": "DELETE"
+			},
+			{
+				"id": "47461622-4745-4d4a-8330-6c0886a66a95",
+				"method": "POST"
+			},
+			{
+				"id": "8e0d1866-f51a-415b-b092-3914f91c7391",
+				"method": "POST"
+			},
+			{
+				"id": "a8af8d51-324e-4c0c-a8eb-76138cb47b02",
+				"method": "PUT"
+			},
+			{
+				"id": "a587df39-b3dc-4108-81f2-392d963865de",
+				"method": "POST"
+			},
+			{
+				"id": "ee9d5bca-38f4-47a2-878f-149647cd01ed",
+				"method": "PUT"
+			},
+			{
+				"id": "08f7504e-4f44-4213-9f7f-32516c9b1d5d",
+				"method": "PUT"
+			},
+			{
+				"id": "81f205aa-7b2d-4f1b-b3f6-1ecf4ebbb13e",
+				"method": "DELETE"
+			},
+			{
+				"id": "ca940a7e-d71f-4d65-aa41-d99656005ce3",
+				"method": "GET"
+			},
+			{
+				"id": "e80beaf1-948e-4fd1-8aed-4ec7e657c31b",
+				"method": "DELETE"
+			}
+		]
+	}
+}

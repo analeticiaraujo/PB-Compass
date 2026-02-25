@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>[#KAN-1] [BUG] - Erro 404 ao tentar deletar um Pet existente na API PetStore</title>
+    <meta http-equiv="Content-Type" Content="application/vnd.ms-word; charset=UTF-8">
+        <style type="text/css">
+
+.tableBorder, .grid
+{
+    background-color: #fff;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tableBorder td, .grid td
+{
+    vertical-align: top;
+    padding: 2px;
+    border: 1px solid #ccc;
+}
+
+.noPadding
+{
+    padding: 0 !important;
+}
+
+h3 .subText
+{
+    font-size: 60%;
+    font-weight: normal;
+}
+
+.tabLabel
+{
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-bottom:none;
+    padding: 2px;
+    display: inline;
+}
+
+td.blank
+{
+    padding: 0;
+    margin: 0;
+}
+
+.blank td
+{
+    border: none;
+}
+
+#descriptionArea
+{
+    margin: 0;
+    padding: 2px;
+    border: 1px solid #ccc;
+}
+
+hr
+{
+    border-top:1px solid #aaa;
+}
+
+hr.fullcontent
+{
+  height: 15px;
+  padding: 10px 0;
+  background: #fff url('https://ana-leticia-de-araujo.atlassian.net/images/icons/hr.gif') no-repeat scroll center;
+}
+
+</style>
+
+</head>
+<body>
+
+<table class="tableBorder" cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+        <td bgcolor="#f0f0f0" width="100%" colspan="2" valign="top">
+                            <h3 class="formtitle">
+                        [KAN-1]&nbsp;<a href="https://ana-leticia-de-araujo.atlassian.net/browse/KAN-1">[BUG] - Erro 404 ao tentar deletar um Pet existente na API PetStore</a>
+            <span class="subText">
+               Criado: 10/fev/26                   &nbsp;Atualizado(a): 10/fev/26
+
+                                            </span>
+            </h3>
+        </td>
+    </tr>
+    <tr>
+        <td width="20%"><b>Status:</b></td>
+        <td width="80%">A fazer</td>
+    </tr>
+    <tr>
+        <td width="20%"><b>Projeto:</b></td>
+        <td width="80%"><a href="https://ana-leticia-de-araujo.atlassian.net/secure/BrowseProject.jspa?id=10001">Semana 7</a></td>
+    </tr>
+
+        <tr>
+            <td><b>Componentes:</b></td>
+            <td>
+                            Nenhum
+                </td>
+    </tr>
+    
+
+        <tr>
+            <td><b>Versões afetadas:</b></td>
+            <td>
+                            Nenhum
+                </td>
+    </tr>
+    
+
+        <tr>
+            <td><b>Versões corrigidas:</b></td>
+            <td>
+                            Nenhum
+                </td>
+    </tr>
+    
+    
+    </table>
+
+<br />
+<table class="grid" cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+        <td bgcolor="#f0f0f0" valign="top" width="20%">
+            <b>Tipo:</b>
+        </td>
+        <td bgcolor="#ffffff" valign="top"  width="30%" >
+            Bug
+        </td>
+
+                    <td bgcolor="#f0f0f0">
+                <b>Prioridade:</b>
+            </td>
+            <td bgcolor="#ffffff" valign="top" nowrap>
+                Medium
+            </td>
+            </tr>
+    <tr>
+                        <td bgcolor="#f0f0f0" valign="top" width="20%">
+                <b>Relator:</b>
+            </td>
+            <td bgcolor="#ffffff" valign="top"  width="30%" >
+                                        
+                
+        
+            <a class="user-hover" rel="712020:be92cae4-3857-4b59-b091-68cba3db41c6"
+                id="word_reporter_712020:be92cae4-3857-4b59-b091-68cba3db41c6"
+                href="https://ana-leticia-de-araujo.atlassian.net/secure/ViewProfile.jspa?accountId=712020%3Abe92cae4-3857-4b59-b091-68cba3db41c6">
+                    Ana Leticia De Araujo
+                </a>
+
+                            </td>
+        
+                    <td bgcolor="#f0f0f0" width="20%">
+                <b>Responsável:</b>
+            </td>
+            <td bgcolor="#ffffff" valign="top" nowrap  width="30%" >
+                                        
+                
+        
+            <a class="user-hover" rel="712020:be92cae4-3857-4b59-b091-68cba3db41c6"
+                id="word_assignee_712020:be92cae4-3857-4b59-b091-68cba3db41c6"
+                href="https://ana-leticia-de-araujo.atlassian.net/secure/ViewProfile.jspa?accountId=712020%3Abe92cae4-3857-4b59-b091-68cba3db41c6">
+                    Ana Leticia De Araujo
+                </a>
+
+                            </td>
+            </tr>
+    	<tr>
+		<td bgcolor="#f0f0f0" width="20%">
+			<b>Resolução:</b>
+		</td>
+		<td bgcolor="#ffffff" valign="top" width="30%" nowrap>
+            				Não resolvido(s)
+                    </td>
+                    <td bgcolor="#f0f0f0" width="20%">
+                <b>Votos:</b>
+            </td>
+            <td bgcolor="#ffffff" valign="top" width="30%" nowrap>
+                0
+            </td>
+        
+    </tr>
+    
+        <tr>
+        <td bgcolor="#f0f0f0" width="20%">
+            <b>Categorias:</b>
+        </td>
+        <td id="labels-10006-value" class="value" bgcolor="#ffffff" valign="top" colspan="3" nowrap>
+                            Nenhum
+                    </td>
+    </tr>
+    
+    	<tr>
+        		<td bgcolor="#f0f0f0" width="20%"><b>Estimativa de trabalho restante:</b></td>
+        <td bgcolor="#ffffff" valign="top" nowrap width="80%" colspan="3">
+                            Desconhecido
+            		</td>
+    </tr>
+    <tr>
+                <td bgcolor="#f0f0f0" width="20%"><b>Tempo gasto:</b></td>
+		<td bgcolor="#ffffff" valign="top" nowrap width="80%" colspan="3">
+                            Desconhecido
+            		</td>
+	</tr>
+    <tr>
+                <td bgcolor="#f0f0f0" width="20%"><b>Estimativa original:</b></td>
+		<td bgcolor="#ffffff" valign="top" nowrap width="80%" colspan="3">
+                            Desconhecido
+            		</td>
+    </tr>
+    
+    </table>
+
+
+
+    <br />
+
+    	<table class="grid" cellpadding="0" cellspacing="0" border="0" width="100%">
+            
+
+                <tr>
+            <td bgcolor="#f0f0f0" width=20% valign=top>
+                <b>Anexos:</b>
+            </td>
+            <td bgcolor="#ffffff" valign="top">
+                                    <img src="https://ana-leticia-de-araujo.atlassian.net/images/icons/attach/image.gif" height="16" width="16" border="0" alt="Arquivo PNG">
+                    Bug delete postman.png &nbsp;&nbsp;&nbsp;
+                            </td>
+        </tr>
+        
+    
+
+
+    
+                        <tr>
+                <td bgcolor="#f0f0f0" width="20%" valign="top"><b>Rank:</b></td>
+                <td id="customfield_10019-10006-value" class="value" bgcolor="#ffffff" width="80%">      0|i0001b:
+  </td>
+            </tr>
+            </table>
+
+    <br/>
+
+    <table cellpadding="2" cellspacing="0" border="0" width="100%" align="center">
+    <tr>
+        <td bgcolor="#bbbbbb" width="1%" nowrap align="center">
+            &nbsp;<font color="#ffffff"><b>Descrição</b></font>&nbsp;
+        </td>
+        <td>&nbsp;</td>
+    </tr>
+    </table>
+
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+        <td id="descriptionArea">
+            <p><b>Descrição:</b> Identificamos que a rota de deleção de pets está apresentando inconsistência. Mesmo após a confirmação de que o Pet foi criado com sucesso (via POST e GET), a chamada de deleção retorna que o recurso não foi encontrado.</p>
+
+<p><b>Passos para Reproduzir:</b></p>
+
+<ol>
+	<li>Realizar uma requisição <b>POST</b> em <tt>/pet</tt> com um ID válido (<tt>98765</tt>).</li>
+	<li>Validar via <b>GET</b> <tt>/pet/98765</tt> que o pet foi criado.</li>
+	<li>Realizar uma requisição <b>DELETE</b> em <tt>/pet/98765</tt>.</li>
+</ol>
+
+
+<p><b>Resultado Esperado:</b></p>
+
+<ul>
+	<li>Status Code <b>200 OK</b>, confirmando a exclusão.</li>
+</ul>
+
+
+<p><b>Resultado Atual:</b></p>
+
+<ul>
+	<li>Status Code <b>404 Not Found</b>.</li>
+</ul>
+
+
+<p><b>Ambiente:</b></p>
+
+<ul>
+	<li>Ambiente de Testes (Swagger PetStore)</li>
+	<li>Ferramenta: Postman</li>
+</ul>
+
+
+<h3><a name="Prioridade%28Priority%29"></a>Prioridade (Priority)</h3>
+
+<ul>
+	<li><b>Média ou Alta</b> (Pois impede que o fluxo de limpeza de dados seja concluído).</li>
+</ul>
+
+
+<h3><a name="Evid%C3%AAncias%28Attachments%29"></a>Evidências (Attachments)</h3>
+            <br/>
+        </td>
+    </tr>
+    </table>
+
+Gerado em Tue Feb 10 13:30:58 UTC 2026 por Ana Leticia De Araujo usando JIRA 1001.0.0-SNAPSHOT#100290-rev:796a52a11252dc57a826f250459ec6e868b2117a.
+
+</body>
+</html>

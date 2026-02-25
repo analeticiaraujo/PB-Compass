@@ -1,0 +1,1696 @@
+{
+  "info": {
+    "_postman_id": "59c88389-383d-41e3-8d8c-d82ef1bf4a70",
+    "name": "compassuol serverest",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52265691",
+    "_collection_link": "https://go.postman.co/collection/52265691-59c88389-383d-41e3-8d8c-d82ef1bf4a70?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "US 001",
+      "item": [
+        {
+          "name": "Novo usuário",
+          "item": [
+            {
+              "name": "Novo usuário",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();\r",
+                      "console.log(\"Resposta da API:\", jsonData);\r",
+                      "\r",
+                      "pm.test(\"Status esperado é 201 (Novo) ou 400 (Já cadastrado)\", function () {\r",
+                      "    pm.expect(pm.response.code).to.be.oneOf([201, 400]);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar mensagem de retorno\", function () {\r",
+                      "    if (pm.response.code === 201) {\r",
+                      "        pm.expect(jsonData.message).to.eql(\"Cadastro realizado com sucesso\");\r",
+                      "        pm.expect(jsonData).to.have.property(\"_id\");\r",
+                      "    } else {\r",
+                      "        pm.expect(jsonData.message).to.eql(\"Este email já está sendo usado\");\r",
+                      "    }\r",
+                      "});\r",
+                      "\r",
+                      "if (pm.response.code === 201) {\r",
+                      "    if (jsonData._id) {\r",
+                      "        pm.environment.set(\"id_usuario_atual\", jsonData._id);\r",
+                      "        console.log(\"ID salvo: \" + jsonData._id);\r",
+                      "    }\r",
+                      "} else {\r",
+                      "    console.warn(\"ID não salvo.\");\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Jose Silva\",\r\n  \"email\": \"jose.unico.2026.03@serverest.com.br\",\r\n  \"password\": \"senha_123\",\r\n  \"administrador\": \"true\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "E-mail já utilizado",
+          "item": [
+            {
+              "name": "Já utilizado",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status deve ser 400 - E-mail já utilizado no PUT\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar mensagem de e-mail duplicado\", function () {\r",
+                      "    pm.expect(jsonData.message).to.eql(\"Este email já está sendo usado\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Tentativa de Duplicidade\",\r\n  \"email\": \"jose@empresa.com.br\",\r\n  \"password\": \"senha\",\r\n  \"administrador\": \"true\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios/id-qualquer-123",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "id-qualquer-123"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Bloqueio de domínio",
+          "item": [
+            {
+              "name": "Email proibido",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Regra de Negócio: Bloquear domínios Gmail/Hotmail\", function () {\r",
+                      "    const requestBody = JSON.parse(pm.request.body.raw);\r",
+                      "    const email = requestBody.email;\r",
+                      "    const dominiosProibidos = [\"gmail.com\", \"hotmail.com\"];\r",
+                      "    const isProibido = dominiosProibidos.some(d => email.includes(d));\r",
+                      "\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    const idCapturado = jsonData._id || jsonData.id; \r",
+                      "\r",
+                      "    if (idCapturado) {\r",
+                      "        pm.environment.set(\"last_created_id\", idCapturado);\r",
+                      "    }\r",
+                      "\r",
+                      "    if (isProibido) {\r",
+                      "        pm.expect(pm.response.code, `BUG: API aceitou e-mail proibido (${email})`).to.equal(400);\r",
+                      "        \r",
+                      "        if (jsonData.message === \"Este email já está sendo usado\") {\r",
+                      "            pm.expect.fail(\"O teste deu 'Pass' falso: O erro 400 foi por e-mail duplicado, não pelo domínio proibido.\");\r",
+                      "        }\r",
+                      "    } else {\r",
+                      "        pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                      "    }\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Usuario Teste Negativo\",\r\n  \"email\": \"jose321@gmail.com\",\r\n  \"password\": \"senha\",\r\n  \"administrador\": \"true\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios/",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Deleta email proibido",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Limpeza: Remover usuário de teste\", function () {\r",
+                      "    // Se não houver ID salvo, o teste de criação falhou como esperado (ex: e-mail bloqueado)\r",
+                      "    // Se houver ID, deletamos e limpamos a variável.\r",
+                      "    if (pm.environment.get(\"last_created_id\")) {\r",
+                      "        pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+                      "        pm.environment.unset(\"last_created_id\");\r",
+                      "    } else {\r",
+                      "        console.log(\"Nada para deletar: O item não foi criado (comportamento esperado para domínios proibidos).\");\r",
+                      "    }\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Jose Silva\",\r\n  \"email\": \"jose.unico.2026.03@serverest.com.br\",\r\n  \"password\": \"senha_123\",\r\n  \"administrador\": \"true\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios/{{last_created_id}}",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "{{last_created_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Senha",
+          "item": [
+            {
+              "name": "Senha curta",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const requestBody = JSON.parse(pm.request.body.raw);\r",
+                      "const senha = requestBody.password;\r",
+                      "\r",
+                      "pm.test(\"Negativo: Sistema deve impedir senhas com menos de 5 caracteres\", function () {\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    // Captura o _id (com underline) caso a API tenha criado o usuário indevidamente\r",
+                      "    const idCapturado = jsonData._id || jsonData.id;\r",
+                      "\r",
+                      "    if (idCapturado) {\r",
+                      "        pm.environment.set(\"last_created_id\", idCapturado);\r",
+                      "    }\r",
+                      "\r",
+                      "    if (senha.length < 5) {\r",
+                      "        // Se a senha é curta, o status esperado é 400. \r",
+                      "        // Se a API retornar 201, o teste vai falhar e mostrar a mensagem de BUG.\r",
+                      "        pm.expect(pm.response.code, `BUG: A API aceitou senha curta (${senha.length} caracteres)` ).to.equal(400);\r",
+                      "    } else {\r",
+                      "        pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                      "    }\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"José Silva\",\r\n  \"email\": \"jose210@empresa.com.br\",\r\n  \"password\": \"1234\",\r\n  \"administrador\": \"true\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Deleta usuario senha curta",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.environment.get(\"last_created_id\")) {\r",
+                      "    pm.test(\"Limpeza: Remover registro de teste\", function () {\r",
+                      "        pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+                      "        pm.environment.unset(\"last_created_id\");\r",
+                      "    });\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios/{{last_created_id}}",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "{{last_created_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Senha longa",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const requestBody = JSON.parse(pm.request.body.raw);\r",
+                      "const senha = requestBody.password;\r",
+                      "\r",
+                      "pm.test(\"Negativo: Sistema deve impedir senhas com mais de 10 caracteres\", function () {\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    // Captura o _id (com underline) caso a API ignore a regra e crie o usuário\r",
+                      "    const idCapturado = jsonData._id || jsonData.id;\r",
+                      "\r",
+                      "    if (idCapturado) {\r",
+                      "        pm.environment.set(\"last_created_id\", idCapturado);\r",
+                      "    }\r",
+                      "\r",
+                      "    if (senha.length > 10) {\r",
+                      "        // Se a senha é maior que 10, o status esperado é 400. \r",
+                      "        // Se a API retornar 201, o teste falha e você tem a prova do BUG.\r",
+                      "        pm.expect(pm.response.code, `BUG: A API aceitou senha longa (${senha.length} caracteres)` ).to.equal(400);\r",
+                      "    } else {\r",
+                      "        pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                      "    }\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"José Silva\",\r\n  \"email\": \"jose11@empresa.com.br\",\r\n  \"password\": \"12345678901\",\r\n  \"administrador\": \"true\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Deleta usuario senha longa",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.environment.get(\"last_created_id\")) {\r",
+                      "    pm.test(\"Limpeza: Remover registro de teste\", function () {\r",
+                      "        pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+                      "        pm.environment.unset(\"last_created_id\");\r",
+                      "    });\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{url_base}}/usuarios/{{last_created_id}}",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "{{last_created_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Senha intermediária",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status deve ser 201 - Senha de 6 caracteres aceita\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    \r",
+                      "    // Captura o _id (com underline) para garantir que as próximas \r",
+                      "    // requisições (Login/Produtos) tenham um alvo válido.\r",
+                      "    const idCapturado = jsonData._id || jsonData.id;\r",
+                      "\r",
+                      "    if (idCapturado) {\r",
+                      "        pm.environment.set(\"last_created_id\", idCapturado);\r",
+                      "    } else {\r",
+                      "        console.log(\"Atenção: A API retornou 201, mas o campo _id não foi encontrado no JSON.\");\r",
+                      "    }\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar se o cadastro foi concluído\", function () {\r",
+                      "    pm.expect(jsonData.message).to.eql(\"Cadastro realizado com sucesso\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"nome\": \"Usuario Teste Senha\",\r\n    \"email\": \"jose31@empresa.com.br\",\r\n    \"password\": \"123456\",\r\n    \"administrador\": \"true\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Deleta usuario senha intermediaria",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.environment.get(\"last_created_id\")) {\r",
+                      "    pm.test(\"Limpeza: Remover usuário com senha de 6 caracteres\", function () {\r",
+                      "        pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+                      "        pm.environment.unset(\"last_created_id\");\r",
+                      "    });\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Jose Silva\",\r\n  \"email\": \"jose.unico.2026.03@serverest.com.br\",\r\n  \"password\": \"senha_123\",\r\n  \"administrador\": \"true\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios/{{last_created_id}}",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "{{last_created_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Usuário duplicado",
+          "item": [
+            {
+              "name": "Duplicado",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status deve ser 400 - E-mail Duplicado\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Mensagem de erro deve ser correta\", function () {\r",
+                      "    pm.expect(jsonData.message).to.eql(\"Este email já está sendo usado\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"José Silva Duplicado\",\r\n  \"email\": \"jose@empresa.com.br\",\r\n  \"password\": \"senha\",\r\n  \"administrador\": \"true\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Usuário novo se não encontrado",
+          "item": [
+            {
+              "name": "PUT",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status deve ser 201 - Criado (Regra: PUT cria se ID não existe)\", function () {\r",
+                      "    // Captura o _id (com underline) caso a API mude de ideia ou para registrar o erro\r",
+                      "    const idCapturado = jsonData._id || jsonData.id;\r",
+                      "\r",
+                      "    if (idCapturado) {\r",
+                      "        pm.environment.set(\"last_created_id\", idCapturado);\r",
+                      "    }\r",
+                      "\r",
+                      "    // Como você documentou que isso é um BUG (atualmente retorna 400), \r",
+                      "    // este teste VAI falhar, o que é o correto para sua evidência.\r",
+                      "    pm.expect(pm.response.code, `BUG: O Upsert falhou! Esperava 201 mas retornou ${pm.response.code}`).to.equal(201);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar mensagem de sucesso\", function () {\r",
+                      "    // Se o status for 400, a mensagem provavelmente será diferente, \r",
+                      "    // gerando mais uma evidência de falha no relatório.\r",
+                      "    pm.expect(jsonData.message).to.be.oneOf([\"Cadastro realizado com sucesso\", \"Registro alterado com sucesso\"]);\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Jose Alterado\",\r\n  \"email\": \"jose.put.20261@empresa.com.br\",\r\n  \"password\": \"senha\",\r\n  \"administrador\": \"true\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios/idinexistente",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "idinexistente"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete put",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.environment.get(\"last_created_id\")) {\r",
+                      "    pm.test(\"Limpeza: Remover registro criado via PUT\", function () {\r",
+                      "        pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+                      "        pm.environment.unset(\"last_created_id\");\r",
+                      "    });\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Jose Silva\",\r\n  \"email\": \"jose.unico.2026.03@serverest.com.br\",\r\n  \"password\": \"senha_123\",\r\n  \"administrador\": \"true\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios/{{last_created_id}}",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "{{last_created_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Demais testes",
+          "item": [
+            {
+              "name": "Deleta usuário",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status deve ser 200 - OK\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar mensagem de retorno do DELETE\", function () {\r",
+                      "    const mensagensEsperadas = [\r",
+                      "        \"Registro excluído com sucesso\",\r",
+                      "        \"Nenhum registro excluído\"\r",
+                      "    ];\r",
+                      "    pm.expect(jsonData.message).to.be.oneOf(mensagensEsperadas);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar se não há erro de dependência (Carrinho)\", function () {\r",
+                      "    if (pm.response.code === 400) {\r",
+                      "        pm.expect(jsonData.message).to.include(\"Não é permitido excluir usuário com carrinho\");\r",
+                      "    }\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Tentativa de Duplicidade\",\r\n  \"email\": \"jose@empresa.com.br\",\r\n  \"password\": \"senha\",\r\n  \"administrador\": \"true\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios/{{id_usuario_atual}}",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "{{id_usuario_atual}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Lista usuarios",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status deve ser 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar se a lista de usuários não está vazia\", function () {\r",
+                      "    pm.expect(jsonData.usuarios).to.be.an(\"array\");\r",
+                      "    pm.expect(jsonData.quantidade).to.be.a(\"number\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar campos obrigatórios no primeiro usuário da lista\", function () {\r",
+                      "    const usuario = jsonData.usuarios[0];\r",
+                      "    pm.expect(usuario).to.have.property(\"nome\");\r",
+                      "    pm.expect(usuario).to.have.property(\"email\");\r",
+                      "    pm.expect(usuario).to.have.property(\"password\");\r",
+                      "    pm.expect(usuario).to.have.property(\"administrador\");\r",
+                      "    pm.expect(usuario).to.have.property(\"_id\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "E-mail fora de padrão",
+          "item": [
+            {
+              "name": "Fora de padrão",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status deve ser 400 - E-mail inválido\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar mensagem de erro de sintaxe\", function () {\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    pm.expect(jsonData.email).to.eql(\"email deve ser um email válido\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Usuario Teste Email\",\r\n  \"email\": \"email_sem_arroba.com\",\r\n  \"password\": \"12345\",\r\n  \"administrador\": \"true\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "US 002",
+      "item": [
+        {
+          "name": "Cria usuario",
+          "item": [
+            {
+              "name": "Cria usuario teste",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();\r",
+                      "console.log(\"Resposta da API:\", jsonData);\r",
+                      "\r",
+                      "pm.test(\"Status esperado é 201 (Novo) ou 400 (Já cadastrado)\", function () {\r",
+                      "    pm.expect(pm.response.code).to.be.oneOf([201, 400]);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar mensagem de retorno\", function () {\r",
+                      "    if (pm.response.code === 201) {\r",
+                      "        pm.expect(jsonData.message).to.eql(\"Cadastro realizado com sucesso\");\r",
+                      "        pm.expect(jsonData).to.have.property(\"_id\");\r",
+                      "    } else {\r",
+                      "        pm.expect(jsonData.message).to.eql(\"Este email já está sendo usado\");\r",
+                      "    }\r",
+                      "});\r",
+                      "\r",
+                      "if (pm.response.code === 201) {\r",
+                      "    if (jsonData._id) {\r",
+                      "        pm.environment.set(\"id_usuario_atual\", jsonData._id);\r",
+                      "        console.log(\"ID salvo: \" + jsonData._id);\r",
+                      "    }\r",
+                      "} else {\r",
+                      "    console.warn(\"ID não salvo.\");\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Jose Silva\",\r\n  \"email\": \"jose.unico.2026.03@serverest.com.br\",\r\n  \"password\": \"senha_123\",\r\n  \"administrador\": \"true\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Teste login",
+          "item": [
+            {
+              "name": "Item inválido",
+              "item": [
+                {
+                  "name": "Usuário invalido",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "const jsonData = pm.response.json();\r",
+                          "\r",
+                          "pm.test(\"Status deve ser 401 - Unauthorized\", function () {\r",
+                          "    pm.response.to.have.status(401);\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Validar mensagem de erro para usuário inexistente\", function () {\r",
+                          "    pm.expect(jsonData.message).to.eql(\"Email e/ou senha inválidos\");\r",
+                          "});"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"fantasma.2026.teste@inexistente.com\",\r\n  \"password\": \"senha\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{url_base}}/login",
+                      "host": [
+                        "{{url_base}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Senha Inválida",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "const jsonData = pm.response.json();\r",
+                          "\r",
+                          "pm.test(\"Status deve ser 401 - Unauthorized\", function () {\r",
+                          "    pm.response.to.have.status(401);\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Validar mensagem de erro para usuário inexistente\", function () {\r",
+                          "    pm.expect(jsonData.message).to.eql(\"Email e/ou senha inválidos\");\r",
+                          "});"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token_bearer}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"jose.unico.2026.03@serverest.com.br\",\r\n  \"password\": \"senha_132\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{url_base}}/login",
+                      "host": [
+                        "{{url_base}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Itens válidos",
+              "item": [
+                {
+                  "name": "Usuário válido",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "const jsonData = pm.response.json();\r",
+                          "\r",
+                          "pm.test(\"Status deve ser 200\", function () {\r",
+                          "    pm.response.to.have.status(200);\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Validar e salvar token bearer\", function () {\r",
+                          "    pm.expect(jsonData.authorization).to.not.be.undefined;\r",
+                          "    \r",
+                          "    let token = jsonData.authorization.replace(\"Bearer \", \"\");\r",
+                          "    pm.environment.set(\"token_bearer\", token);\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Validar mensagem de sucesso\", function () {\r",
+                          "    pm.expect(jsonData.message).to.eql(\"Login realizado com sucesso\");\r",
+                          "});"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"jose.unico.2026.03@serverest.com.br\",\r\n  \"password\": \"senha_123\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{url_base}}/login",
+                      "host": [
+                        "{{url_base}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Deleta Usuario",
+          "item": [
+            {
+              "name": "Deleta usuario",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.environment.get(\"last_created_id\")) {\r",
+                      "    pm.test(\"Limpeza: Remover usuário com senha de 6 caracteres\", function () {\r",
+                      "        pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+                      "        pm.environment.unset(\"last_created_id\");\r",
+                      "    });\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{url_base}}/usuarios/{{id_usuario_atual}}}",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "{{id_usuario_atual}}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "US 003",
+      "item": [
+        {
+          "name": "Cria usuário",
+          "item": [
+            {
+              "name": "Cria usuario teste Copy",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();\r",
+                      "console.log(\"Resposta da API:\", jsonData);\r",
+                      "\r",
+                      "pm.test(\"Status esperado é 201 (Novo) ou 400 (Já cadastrado)\", function () {\r",
+                      "    pm.expect(pm.response.code).to.be.oneOf([201, 400]);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar mensagem de retorno\", function () {\r",
+                      "    if (pm.response.code === 201) {\r",
+                      "        pm.expect(jsonData.message).to.eql(\"Cadastro realizado com sucesso\");\r",
+                      "        pm.expect(jsonData).to.have.property(\"_id\");\r",
+                      "    } else {\r",
+                      "        pm.expect(jsonData.message).to.eql(\"Este email já está sendo usado\");\r",
+                      "    }\r",
+                      "});\r",
+                      "\r",
+                      "if (pm.response.code === 201) {\r",
+                      "    if (jsonData._id) {\r",
+                      "        pm.environment.set(\"id_usuario_atual\", jsonData._id);\r",
+                      "        console.log(\"ID salvo: \" + jsonData._id);\r",
+                      "    }\r",
+                      "} else {\r",
+                      "    console.warn(\"ID não salvo.\");\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Jose Silva\",\r\n  \"email\": \"jose.unico.2026.03@serverest.com.br\",\r\n  \"password\": \"senha_123\",\r\n  \"administrador\": \"true\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/usuarios",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Novo produto",
+          "item": [
+            {
+              "name": "Novo produto",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status deve ser 201\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar mensagem e salvar ID do produto\", function () {\r",
+                      "    pm.expect(jsonData.message).to.eql(\"Cadastro realizado com sucesso\");\r",
+                      "    pm.expect(jsonData._id).to.not.be.undefined;\r",
+                      "    \r",
+                      "    // Salva o ID do produto para os próximos testes\r",
+                      "    pm.environment.set(\"id_produto_atual\", jsonData._id);\r",
+                      "    console.log(\"ID do Produto salvo: \" + jsonData._id);\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token_bearer}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Impvc2UudW5pY28uMjAyNi4wMUBzZXJ2ZXJlc3QuY29tLmJyIiwicGFzc3dvcmQiOiJzZW5oYV8xMjMiLCJpYXQiOjE3NzA5MDYxOTIsImV4cCI6MTc3MDkwNjc5Mn0.teQ7JqQZ2hQgqhUMNPnCz5_W0hgH_-S9T4FgK5r_dZw",
+                    "description": "Bearer",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Teclado Mecanico RGB 202610\",\r\n  \"preco\": 450,\r\n  \"descricao\": \"Teclado Gamer Switch Blue\",\r\n  \"quantidade\": 100\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/produtos",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "produtos"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Produto via PUT",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status deve ser 201 - Criado via PUT (Upsert)\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Mensagem de cadastro realizado\", function () {\r",
+                      "    pm.expect(pm.response.json().message).to.eql(\"Cadastro realizado com sucesso\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token_bearer}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Produto Upsert 20261\",\r\n  \"preco\": 150,\r\n  \"descricao\": \"Teste de criação via PUT\",\r\n  \"quantidade\": 30\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/produtos/1234567890abcdef",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "produtos",
+                    "1234567890abcdef"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Já existente",
+          "item": [
+            {
+              "name": "Ja existente",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status deve ser 400 - Bad Request\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar mensagem de erro por nome duplicado\", function () {\r",
+                      "    pm.expect(jsonData.message).to.eql(\"Já existe produto com esse nome\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token_bearer}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Teclado Mecanico RGB 2026\",\r\n  \"preco\": 450,\r\n  \"descricao\": \"Teclado Gamer Switch Blue\",\r\n  \"quantidade\": 100\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/produtos",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "produtos"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Nome duplicado",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status deve ser 400 - Conflito de nome\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar mensagem de erro\", function () {\r",
+                      "    pm.expect(pm.response.json().message).to.eql(\"Já existe produto com esse nome\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token_bearer}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Teclado Mecanico RGB 2026\",\r\n  \"preco\": 450,\r\n  \"descricao\": \"Teclado Gamer Switch Blue\",\r\n  \"quantidade\": 100\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/produtos/{{id_produto_atual}}",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "produtos",
+                    "{{id_produto_atual}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Editar produto",
+          "item": [
+            {
+              "name": "Editar produto",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status deve ser 200 - Sucesso na alteração\", function () {\r",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar mensagem de retorno do PUT\", function () {\r",
+                      "    const mensagensSucesso = [\"Registro alterado com sucesso\", \"Cadastro realizado com sucesso\"];\r",
+                      "    pm.expect(mensagensSucesso).to.include(jsonData.message);\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token_bearer}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nome\": \"Teclado Mecanico RGB 2026 - Edicao Gold\",\r\n  \"preco\": 599,\r\n  \"descricao\": \"Teclado Gamer com switch premium\",\r\n  \"quantidade\": 50\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url_base}}/produtos/{{id_produto_atual}}",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "produtos",
+                    "{{id_produto_atual}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Deletar produto",
+          "item": [
+            {
+              "name": "Deletar produto",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status deve ser 200 - Registro excluído\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar mensagem de exclusão\", function () {\r",
+                      "    pm.expect(jsonData.message).to.eql(\"Registro excluído com sucesso\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token_bearer}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{url_base}}/produtos/{{id_produto_atual}}",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "produtos",
+                    "{{id_produto_atual}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Get sem auth",
+          "item": [
+            {
+              "name": "Sem autenticação",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status deve ser 401 - Unauthorized\", function () {\r",
+                      "    pm.response.to.have.status(401);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar mensagem de erro de autenticação\", function () {\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    pm.expect(jsonData.message).to.eql(\"Token de acesso ausente, inválido, expirado ou usuário do token não existe mais\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url_base}}/produtos/",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "produtos",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Deleta usuário",
+          "item": [
+            {
+              "name": "Deleta usuário criado",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.environment.get(\"last_created_id\")) {\r",
+                      "    pm.test(\"Limpeza: Remover usuário com senha de 6 caracteres\", function () {\r",
+                      "        pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+                      "        pm.environment.unset(\"last_created_id\");\r",
+                      "    });\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{url_base}}/usuarios/{{id_usuario_atual}}",
+                  "host": [
+                    "{{url_base}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "{{id_usuario_atual}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
