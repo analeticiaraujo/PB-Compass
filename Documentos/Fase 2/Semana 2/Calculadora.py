@@ -26,7 +26,7 @@ class Calculadora():
         if numero2 == 0:
             raise ZeroDivisionError("Não é possível dividir por 0")
         else:
-            valorfinal = numero1 % numero2
+            valorfinal = numero1 - (int(numero1 / numero2) * numero2)
             return valorfinal
 
 

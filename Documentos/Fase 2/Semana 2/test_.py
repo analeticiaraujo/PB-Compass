@@ -59,7 +59,7 @@ def test_exponencial(numero1, numero2, valorfinal):
 
 @pytest.mark.parametrize("numero1, numero2, valorfinal", [
     (4, 9, 4),
-    (-14, 6, 4),
+    (-14, 6, -2),
     (28, 8372, 28)
 ])
 
