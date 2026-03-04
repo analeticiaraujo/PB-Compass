@@ -14,8 +14,8 @@ class Calculadora():
         valorfinal = numero1 * numero2
         return valorfinal
     def divisao(self, numero1, numero2):
-        if numero1 == 0:
-            return "Não é possível dividir por 0"
+        if numero2 == 0:
+            raise ZeroDivisionError("Não é possível dividir por 0")
         else:
             valorfinal = numero1 / numero2
             return valorfinal
@@ -23,10 +23,10 @@ class Calculadora():
         valorfinal = numero1 ** numero2
         return valorfinal
     def divisaoresto(self, numero1, numero2):
-        if numero1 == 0:
-            return "Não é possível dividir por 0"
+        if numero2 == 0:
+            raise ZeroDivisionError("Não é possível dividir por 0")
         else:
-            valorfinal = numero1 // numero2
+            valorfinal = numero1 % numero2
             return valorfinal
 
 
@@ -43,7 +43,7 @@ if __name__ == "__main__":
 
     operacao = ""
 
-    while operacao is not 7:
+    while operacao != 7:
         print('''   [1] - somar 
         [2] - subtrair 
         [3] - multiplicar 
