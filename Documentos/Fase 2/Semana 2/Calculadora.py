@@ -1,5 +1,4 @@
 ### CALCULADORA BASICA ###
-import pytest
 
 valorfinal = float
 
@@ -64,4 +63,5 @@ if __name__ == "__main__":
             valorfinal = operacaoescolhida(numero1, numero2)
             print(f'O valor final é {valorfinal}')
         else:
+
             print("Operação não suportada pela calculadora")
