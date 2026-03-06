@@ -28,6 +28,8 @@ Lógica e Menu Interativo: Inspirado na didática do Prof. Gustavo Guanabara (Cu
 
 Suíte de Testes (Pytest): Baseado no curso "Domine Pytest: Testes de Software com Python" de Fernando Amaral (Udemy), aplicando técnicas de parametrização e tratamento de exceções.
 
+Assistência de IA (Gemini): Utilizado como ferramenta de consulta dinâmica para otimização de tempo em substituição ao StackOverflow, auxiliando na resolução de bugs de conversão de tipos.
+
 **Estrutura de Testes** <br>
 Para garantir a confiabilidade das operações (Soma, Subtração, Multiplicação, Divisão e Resto), foram implementados testes unitários que cobrem:
 
