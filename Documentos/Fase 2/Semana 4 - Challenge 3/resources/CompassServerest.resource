@@ -89,3 +89,44 @@ Procurar um usuário baseando-se na ID
     Should Contain    ${resposta.json()}    _id
     
     Should Be Equal As Strings    ${resposta.json()['email']}    ${EMAIL_TEST}
+
+Modificar os dados do usuário
+    ${body}  Create Dictionary  
+    ...    nome=Fulano de Tal Atualizado  
+    ...    email=${EMAIL_TEST}  
+    ...    password=nova_senha_123  
+    ...    administrador=true
+
+    ${resposta}  PUT On Session  
+    ...    alias=ServeRest
+    ...    url=/usuarios/${ID_USUARIO_CRIADO}
+    ...    json=${body}
+    ...    expected_status=200
+    ...    verify=${False}
+
+    Log To Console    Status da Alteração: ${resposta.status_code}
+    Log To Console    Mensagem: ${resposta.json()['message']}
+
+    Should Be Equal As Strings    ${resposta.json()['message']}    Registro alterado com sucesso
+
+Deletar o usuário já existente
+    ${resposta}  DELETE On Session
+    ...    alias=ServeRest
+    ...    url=/usuarios/${ID_USUARIO_CRIADO}
+    ...    expected_status=200
+    ...    verify=${False}
+
+    Log To Console    Status da Alteração: ${resposta.status_code}
+    Log To Console    Mensagem: ${resposta.json()['message']}
+
+    Should Be Equal As Strings    ${resposta.json()['message']}    Registro excluído com sucesso
+
+Verificar se o DELETE funcionou
+    ${resposta}    GET On Session  
+    ...    alias=ServeRest
+    ...    url=/usuarios/${ID_USUARIO_CRIADO}
+    ...    expected_status=400
+    ...    verify=${False}
+    
+    Should Be Equal As Strings    ${resposta.json()['message']}    Usuário não encontrado
+    Log To Console    Confirmação: O usuário sumiu do sistema com sucesso!
