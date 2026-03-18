@@ -13,3 +13,5 @@ Cenário 01: Cadastrar um novo usuário com sucesso na ServeRest
 Cenário 02: Cadastrar um usuário já existente
     Cadastrar um usuário já existente
 
+Cenário 03: Encontra um usuário baseando-se na ID
+    Procurar um usuário baseando-se na ID

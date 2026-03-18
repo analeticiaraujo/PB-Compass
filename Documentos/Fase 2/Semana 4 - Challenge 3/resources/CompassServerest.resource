@@ -73,3 +73,19 @@ Cadastrar um usuário já existente
     Log To Console    Mensagem da API: ${resposta.json()['message']}
     
     Should Be Equal As Strings    ${resposta.json()['message']}    Este email já está sendo usado
+
+Procurar um usuário baseando-se na ID
+    ${resposta}    GET On Session  
+    ...    alias=ServeRest
+    ...    url=/usuarios/${ID_USUARIO_CRIADO}
+    ...    expected_status=200
+    ...    verify=${False}
+    Log To Console    Nome: ${resposta.json()['nome']}
+    Log To Console    Email: ${resposta.json()['email']}
+    Log To Console    ID: ${resposta.json()['_id']}
+
+    Should Contain    ${resposta.json()}    nome
+    Should Contain    ${resposta.json()}    email
+    Should Contain    ${resposta.json()}    _id
+    
+    Should Be Equal As Strings    ${resposta.json()['email']}    ${EMAIL_TEST}
