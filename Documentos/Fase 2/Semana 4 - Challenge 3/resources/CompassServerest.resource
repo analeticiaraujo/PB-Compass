@@ -40,7 +40,7 @@ Cadastrar o usuário criado na ServeRest
     ...    expected_status=any
     ...    verify=${False}
     ...    allow_redirects=${False}
-    Log  ${body}
+    Log    ${body}
     Log    ${resposta.text}
     Log To Console    \nStatus retornado: ${resposta.status_code}
     Log To Console    Resposta do servidor: ${resposta.text}
@@ -54,8 +54,22 @@ Cadastrar o usuário criado na ServeRest
         Fail    A API não retornou 201. Retornou ${resposta.status_code}. Verifique o log!
     END
 
-Pegar o ID gerado pelo sistema para usar depois
-    IF    ${resposta.status_code} == 201
-    ${id_criado}    Set Variable    ${resposta.json()['_id']}
-    Set Global Variable    ${ID_USUARIO_CRIADO}    ${id_criado}
-    END
+Cadastrar um usuário já existente
+    ${body}  Create Dictionary  
+    ...    nome=Fulano Replicado  
+    ...    email=${EMAIL_TEST}
+    ...    password=654321  
+    ...    administrador=true
+
+    ${resposta}  POST On Session  
+    ...    alias=ServeRest
+    ...    url=/usuarios
+    ...    json=${body}
+    ...    expected_status=400
+    ...    verify=${False}
+    ...    allow_redirects=${False}
+    
+    Log To Console    \nStatus esperado de erro: ${resposta.status_code}
+    Log To Console    Mensagem da API: ${resposta.json()['message']}
+    
+    Should Be Equal As Strings    ${resposta.json()['message']}    Este email já está sendo usado
