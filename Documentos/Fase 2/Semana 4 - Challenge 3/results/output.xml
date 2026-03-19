@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.2 (Python 3.14.3 on win32)" generated="2026-03-17T11:09:12.856646" rpa="false" schemaversion="5">
+<suite id="s1" name="CompassServerest" source="C:\Users\AnaLeticiaDeAraujo\Documents\Challenge3\CompassServerest.robot">
+<test id="s1-t1" name="Cenário 01: Cadastrar um novo usuário com sucesso na ServeRest" line="8">
+<kw name="Criar um novo usuário">
+<msg time="2026-03-17T11:09:12.888387" level="FAIL">No keyword with name 'Criar um novo usuário' found.</msg>
+<status status="FAIL" start="2026-03-17T11:09:12.888350" elapsed="0.000083">No keyword with name 'Criar um novo usuário' found.</status>
+</kw>
+<kw name="Criar Sessão na ServeRest">
+<status status="NOT RUN" start="2026-03-17T11:09:12.888741" elapsed="0.000023"/>
+</kw>
+<kw name="Cadastrar o usuário criado na ServeRest">
+<status status="NOT RUN" start="2026-03-17T11:09:12.888989" elapsed="0.000018"/>
+</kw>
+<status status="FAIL" start="2026-03-17T11:09:12.887065" elapsed="0.002189">No keyword with name 'Criar um novo usuário' found.</status>
+</test>
+<status status="FAIL" start="2026-03-17T11:09:12.858888" elapsed="0.031429"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="CompassServerest" id="s1" pass="0" fail="1" skip="0">CompassServerest</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2026-03-17T11:09:12.885843" level="ERROR">Error in file 'C:\Users\AnaLeticiaDeAraujo\Documents\Challenge3\CompassServerest.robot' on line 2: Resource file '..\resources\CompassServerest.resource' does not exist.</msg>
+</errors>
+</robot>
