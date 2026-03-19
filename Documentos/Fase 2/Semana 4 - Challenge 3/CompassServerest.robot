@@ -1,9 +1,6 @@
 *** Settings ***
 Resource  ../resources/CompassServerest.resource
 
-*** Variables ***
-
-
 *** Test Cases ***
 Cenário 01: Cadastrar um novo usuário com sucesso na ServeRest
     Criar um novo usuário
@@ -25,3 +22,8 @@ Cenário 05: Deletar usuário
 Cenário 06: Validar que o usuário excluído não existe mais
     Verificar se o DELETE funcionou
 
+Cenário 07: Verificar se tem regras de adição de usuário
+    Adicionar usuário com e-mail inválido
+
+Cenário 08: Adiciona um usuário com números no nome
+    Adicionar usuário com números no nome
