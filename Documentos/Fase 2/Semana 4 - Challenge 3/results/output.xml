@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.2 (Python 3.14.3 on win32)" generated="2026-03-19T10:46:50.235692" rpa="false" schemaversion="5">
+<suite id="s1" name="Challenge3" source="C:\Users\AnaLeticiaDeAraujo\Documents\Challenge3">
+<suite id="s1-s1" name="CompassServerest" source="C:\Users\AnaLeticiaDeAraujo\Documents\Challenge3\CompassServerest.robot">
+<test id="s1-s1-t1" name="Cenário 01: Cadastrar um novo usuário com sucesso na ServeRest" line="8">
+<kw name="Criar um novo usuário" owner="CompassServerest">
+<kw name="Generate Random String" owner="String">
+<msg time="2026-03-19T10:46:50.451594" level="INFO">${palavra_aleatoria} = CbSq</msg>
+<var>${palavra_aleatoria}</var>
+<arg>length=4</arg>
+<arg>chars=[LETTERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<status status="PASS" start="2026-03-19T10:46:50.451190" elapsed="0.000589"/>
+</kw>
+<kw name="Convert To Lower Case" owner="String">
+<msg time="2026-03-19T10:46:50.452388" level="INFO">${palavra_aleatoria} = cbsq</msg>
+<var>${palavra_aleatoria}</var>
+<arg>${palavra_aleatoria}</arg>
+<doc>Converts string to lower case.</doc>
+<status status="PASS" start="2026-03-19T10:46:50.451946" elapsed="0.000710"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-03-19T10:46:50.453300" level="INFO">${EMAIL_TEST} = cbsq@emailtest.com</msg>
+<arg>${EMAIL_TEST}</arg>
+<arg>${palavra_aleatoria}@emailtest.com</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-03-19T10:46:50.452819" elapsed="0.000784"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-19T10:46:50.454207" level="INFO">cbsq@emailtest.com</msg>
+<arg>${EMAIL_TEST}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-19T10:46:50.453838" elapsed="0.000520"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:50.450566" elapsed="0.003918"/>
+</kw>
+<kw name="Criar Sessão na ServeRest" owner="CompassServerest">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-19T10:46:50.456044" level="INFO">${headers} = {'accept': 'application/json', 'Content-Type': 'application/json'}</msg>
+<var>${headers}</var>
+<arg>accept=application/json</arg>
+<arg>Content-Type=application/json</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-19T10:46:50.455374" elapsed="0.000899"/>
+</kw>
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2026-03-19T10:46:50.457037" level="INFO">Creating Session using : alias=ServeRest, url=https://compassuol.serverest.dev, headers={'accept': 'application/json', 'Content-Type': 'application/json'},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>alias=ServeRest</arg>
+<arg>url=https://compassuol.serverest.dev</arg>
+<arg>headers=${headers}</arg>
+<arg>verify=False</arg>
+<arg>disable_warnings=1</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2026-03-19T10:46:50.456448" elapsed="0.001055"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:50.454834" elapsed="0.002860"/>
+</kw>
+<kw name="Cadastrar o usuário criado na ServeRest" owner="CompassServerest">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-19T10:46:50.459579" level="INFO">${body} = {'nome': 'Fulano da Silva', 'email': 'cbsq@emailtest.com', 'password': '1234', 'administrador': 'true'}</msg>
+<var>${body}</var>
+<arg>nome=Fulano da Silva</arg>
+<arg>email=${EMAIL_TEST}</arg>
+<arg>password=1234</arg>
+<arg>administrador=true</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-19T10:46:50.458989" elapsed="0.000746"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-03-19T10:46:51.650467" level="INFO">POST Request : url=https://compassuol.serverest.dev/usuarios 
+ path_url=/usuarios 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'accept': 'application/json', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '103'} 
+ body=b'{"nome": "Fulano da Silva", "email": "cbsq@emailtest.com", "password": "1234", "administrador": "true"}' 
+ </msg>
+<msg time="2026-03-19T10:46:51.650749" level="INFO">POST Response : url=https://compassuol.serverest.dev/usuarios 
+ status=201, reason=Created 
+ headers={'access-control-allow-origin': '*', 'x-dns-prefetch-control': 'off', 'x-frame-options': 'SAMEORIGIN', 'strict-transport-security': 'max-age=15552000; includeSubDomains', 'x-download-options': 'noopen', 'x-content-type-options': 'nosniff', 'x-xss-protection': '1; mode=block', 'content-type': 'application/json; charset=utf-8', 'x-cloud-trace-context': '3305c639c44d44e18f75c737f95df30d;o=1', 'date': 'Thu, 19 Mar 2026 13:46:51 GMT', 'server': 'Google Frontend', 'Content-Length': '82'} 
+ body={
+    "message": "Cadastro realizado com sucesso",
+    "_id": "bGra2vAoPYcg6z2U"
+} 
+ </msg>
+<msg time="2026-03-19T10:46:51.650961" level="INFO">${resposta} = &lt;Response [201]&gt;</msg>
+<var>${resposta}</var>
+<arg>alias=ServeRest</arg>
+<arg>url=/usuarios</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=any</arg>
+<arg>verify=${False}</arg>
+<arg>allow_redirects=${False}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-19T10:46:50.459877" elapsed="1.191168"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-19T10:46:51.651614" level="INFO">{'nome': 'Fulano da Silva', 'email': 'cbsq@emailtest.com', 'password': '1234', 'administrador': 'true'}</msg>
+<arg>${body}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-19T10:46:51.651235" elapsed="0.000508"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-19T10:46:51.652379" level="INFO">{
+    "message": "Cadastro realizado com sucesso",
+    "_id": "bGra2vAoPYcg6z2U"
+}</msg>
+<arg>${resposta.text}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-19T10:46:51.651875" elapsed="0.000612"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nStatus retornado: ${resposta.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:51.652595" elapsed="0.000748"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Resposta do servidor: ${resposta.text}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:51.653848" elapsed="0.001372"/>
+</kw>
+<if>
+<branch type="IF" condition="${resposta.status_code} == 201">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-19T10:46:51.657004" level="INFO">${id_criado} = bGra2vAoPYcg6z2U</msg>
+<var>${id_criado}</var>
+<arg>${resposta.json()['_id']}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-19T10:46:51.656303" elapsed="0.000887"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>ID do novo usuário: ${id_criado}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:51.657336" elapsed="0.000569"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-03-19T10:46:51.658687" level="INFO">${ID_USUARIO_CRIADO} = bGra2vAoPYcg6z2U</msg>
+<arg>${ID_USUARIO_CRIADO}</arg>
+<arg>${id_criado}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-03-19T10:46:51.658068" elapsed="0.000814"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:51.655498" elapsed="0.003492"/>
+</branch>
+<branch type="ELSE">
+<kw name="Fail" owner="BuiltIn">
+<arg>A API não retornou 201. Retornou ${resposta.status_code}. Verifique o log!</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" start="2026-03-19T10:46:51.659298" elapsed="0.000101"/>
+</kw>
+<status status="NOT RUN" start="2026-03-19T10:46:51.659097" elapsed="0.000386"/>
+</branch>
+<status status="PASS" start="2026-03-19T10:46:51.655444" elapsed="0.004079"/>
+</if>
+<status status="PASS" start="2026-03-19T10:46:50.458399" elapsed="1.201183"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:50.447197" elapsed="1.212845"/>
+</test>
+<test id="s1-s1-t2" name="Cenário 02: Cadastrar um usuário já existente" line="13">
+<kw name="Cadastrar um usuário já existente" owner="CompassServerest">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-19T10:46:51.670285" level="INFO">${body} = {'nome': 'Fulano Replicado', 'email': 'cbsq@emailtest.com', 'password': '654321', 'administrador': 'true'}</msg>
+<var>${body}</var>
+<arg>nome=Fulano Replicado</arg>
+<arg>email=${EMAIL_TEST}</arg>
+<arg>password=654321</arg>
+<arg>administrador=true</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-19T10:46:51.669657" elapsed="0.000901"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-03-19T10:46:51.875781" level="INFO">POST Request : url=https://compassuol.serverest.dev/usuarios 
+ path_url=/usuarios 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'accept': 'application/json', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '106'} 
+ body=b'{"nome": "Fulano Replicado", "email": "cbsq@emailtest.com", "password": "654321", "administrador": "true"}' 
+ </msg>
+<msg time="2026-03-19T10:46:51.876071" level="INFO">POST Response : url=https://compassuol.serverest.dev/usuarios 
+ status=400, reason=Bad Request 
+ headers={'access-control-allow-origin': '*', 'x-dns-prefetch-control': 'off', 'x-frame-options': 'SAMEORIGIN', 'strict-transport-security': 'max-age=15552000; includeSubDomains', 'x-download-options': 'noopen', 'x-content-type-options': 'nosniff', 'x-xss-protection': '1; mode=block', 'content-type': 'application/json; charset=utf-8', 'x-cloud-trace-context': '233908152bc21f1b8f75c737f95df29c', 'date': 'Thu, 19 Mar 2026 13:46:52 GMT', 'server': 'Google Frontend', 'Content-Length': '53'} 
+ body={
+    "message": "Este email já está sendo usado"
+} 
+ </msg>
+<msg time="2026-03-19T10:46:51.876293" level="INFO">${resposta} = &lt;Response [400]&gt;</msg>
+<var>${resposta}</var>
+<arg>alias=ServeRest</arg>
+<arg>url=/usuarios</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=400</arg>
+<arg>verify=${False}</arg>
+<arg>allow_redirects=${False}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-19T10:46:51.670761" elapsed="0.205619"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nStatus esperado de erro: ${resposta.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:51.876583" elapsed="0.001042"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Mensagem da API: ${resposta.json()['message']}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:51.877979" elapsed="0.001398"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${resposta.json()['message']}</arg>
+<arg>Este email já está sendo usado</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2026-03-19T10:46:51.879630" elapsed="0.000727"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:51.669199" elapsed="0.211278"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:51.664967" elapsed="0.215920"/>
+</test>
+<test id="s1-s1-t3" name="Cenário 03: Encontra um usuário baseando-se na ID" line="16">
+<kw name="Procurar um usuário baseando-se na ID" owner="CompassServerest">
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2026-03-19T10:46:52.092011" level="INFO">GET Request : url=https://compassuol.serverest.dev/usuarios/bGra2vAoPYcg6z2U 
+ path_url=/usuarios/bGra2vAoPYcg6z2U 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'accept': 'application/json', 'Connection': 'keep-alive', 'Content-Type': 'application/json'} 
+ body=None 
+ </msg>
+<msg time="2026-03-19T10:46:52.092534" level="INFO">GET Response : url=https://compassuol.serverest.dev/usuarios/bGra2vAoPYcg6z2U 
+ status=200, reason=OK 
+ headers={'access-control-allow-origin': '*', 'x-dns-prefetch-control': 'off', 'x-frame-options': 'SAMEORIGIN', 'strict-transport-security': 'max-age=15552000; includeSubDomains', 'x-download-options': 'noopen', 'x-content-type-options': 'nosniff', 'x-xss-protection': '1; mode=block', 'content-type': 'application/json; charset=utf-8', 'x-cloud-trace-context': 'e3d23a9a7e733d368f75c737f95dfcfb', 'date': 'Thu, 19 Mar 2026 13:46:52 GMT', 'server': 'Google Frontend', 'Content-Length': '152'} 
+ body={
+    "nome": "Fulano da Silva",
+    "email": "cbsq@emailtest.com",
+    "password": "1234",
+    "administrador": "true",
+    "_id": "bGra2vAoPYcg6z2U"
+} 
+ </msg>
+<msg time="2026-03-19T10:46:52.093055" level="INFO">${resposta} = &lt;Response [200]&gt;</msg>
+<var>${resposta}</var>
+<arg>alias=ServeRest</arg>
+<arg>url=/usuarios/${ID_USUARIO_CRIADO}</arg>
+<arg>expected_status=200</arg>
+<arg>verify=${False}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-19T10:46:51.894320" elapsed="0.198979"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Nome: ${resposta.json()['nome']}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.093752" elapsed="0.002710"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Email: ${resposta.json()['email']}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.096977" elapsed="0.001948"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>ID: ${resposta.json()['_id']}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.099463" elapsed="0.002317"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${resposta.json()}</arg>
+<arg>nome</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.102317" elapsed="0.002096"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${resposta.json()}</arg>
+<arg>email</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.104918" elapsed="0.001575"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${resposta.json()}</arg>
+<arg>_id</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.106853" elapsed="0.001504"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${resposta.json()['email']}</arg>
+<arg>${EMAIL_TEST}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.108690" elapsed="0.001469"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:51.893907" elapsed="0.216512"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:51.885623" elapsed="0.225551"/>
+</test>
+<test id="s1-s1-t4" name="Cenário 04: Modifica os dados do usuário já existente" line="19">
+<kw name="Modificar os dados do usuário" owner="CompassServerest">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-19T10:46:52.125736" level="INFO">${body} = {'nome': 'Fulano de Tal Atualizado', 'email': 'cbsq@emailtest.com', 'password': 'nova_senha_123', 'administrador': 'true'}</msg>
+<var>${body}</var>
+<arg>nome=Fulano de Tal Atualizado</arg>
+<arg>email=${EMAIL_TEST}</arg>
+<arg>password=nova_senha_123</arg>
+<arg>administrador=true</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.125189" elapsed="0.000710"/>
+</kw>
+<kw name="PUT On Session" owner="RequestsLibrary">
+<msg time="2026-03-19T10:46:52.328805" level="INFO">PUT Request : url=https://compassuol.serverest.dev/usuarios/bGra2vAoPYcg6z2U 
+ path_url=/usuarios/bGra2vAoPYcg6z2U 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'accept': 'application/json', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '122'} 
+ body=b'{"nome": "Fulano de Tal Atualizado", "email": "cbsq@emailtest.com", "password": "nova_senha_123", "administrador": "true"}' 
+ </msg>
+<msg time="2026-03-19T10:46:52.329283" level="INFO">PUT Response : url=https://compassuol.serverest.dev/usuarios/bGra2vAoPYcg6z2U 
+ status=200, reason=OK 
+ headers={'access-control-allow-origin': '*', 'x-dns-prefetch-control': 'off', 'x-frame-options': 'SAMEORIGIN', 'strict-transport-security': 'max-age=15552000; includeSubDomains', 'x-download-options': 'noopen', 'x-content-type-options': 'nosniff', 'x-xss-protection': '1; mode=block', 'content-type': 'application/json; charset=utf-8', 'x-cloud-trace-context': '3dddc61b1030648f8f75c737f95dffc1', 'date': 'Thu, 19 Mar 2026 13:46:52 GMT', 'server': 'Google Frontend', 'Content-Length': '50'} 
+ body={
+    "message": "Registro alterado com sucesso"
+} 
+ </msg>
+<msg time="2026-03-19T10:46:52.329777" level="INFO">${resposta} = &lt;Response [200]&gt;</msg>
+<var>${resposta}</var>
+<arg>alias=ServeRest</arg>
+<arg>url=/usuarios/${ID_USUARIO_CRIADO}</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=200</arg>
+<arg>verify=${False}</arg>
+<doc>Sends a PUT request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.126093" elapsed="0.203916"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Status da Alteração: ${resposta.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.330435" elapsed="0.002037"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Mensagem: ${resposta.json()['message']}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.332894" elapsed="0.002148"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${resposta.json()['message']}</arg>
+<arg>Registro alterado com sucesso</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.335439" elapsed="0.001544"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:52.124701" elapsed="0.212558"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:52.118220" elapsed="0.220048"/>
+</test>
+<test id="s1-s1-t5" name="Cenário 05: Deletar usuário" line="22">
+<kw name="Deletar o usuário já existente" owner="CompassServerest">
+<kw name="DELETE On Session" owner="RequestsLibrary">
+<msg time="2026-03-19T10:46:52.563469" level="INFO">DELETE Request : url=https://compassuol.serverest.dev/usuarios/bGra2vAoPYcg6z2U 
+ path_url=/usuarios/bGra2vAoPYcg6z2U 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'accept': 'application/json', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-03-19T10:46:52.563941" level="INFO">DELETE Response : url=https://compassuol.serverest.dev/usuarios/bGra2vAoPYcg6z2U 
+ status=200, reason=OK 
+ headers={'access-control-allow-origin': '*', 'x-dns-prefetch-control': 'off', 'x-frame-options': 'SAMEORIGIN', 'strict-transport-security': 'max-age=15552000; includeSubDomains', 'x-download-options': 'noopen', 'x-content-type-options': 'nosniff', 'x-xss-protection': '1; mode=block', 'content-type': 'application/json; charset=utf-8', 'x-cloud-trace-context': '1614d8f0c1d36d888f75c737f95df40c', 'date': 'Thu, 19 Mar 2026 13:46:52 GMT', 'server': 'Google Frontend', 'Content-Length': '51'} 
+ body={
+    "message": "Registro excluído com sucesso"
+} 
+ </msg>
+<msg time="2026-03-19T10:46:52.564439" level="INFO">${resposta} = &lt;Response [200]&gt;</msg>
+<var>${resposta}</var>
+<arg>alias=ServeRest</arg>
+<arg>url=/usuarios/${ID_USUARIO_CRIADO}</arg>
+<arg>expected_status=200</arg>
+<arg>verify=${False}</arg>
+<doc>Sends a DELETE request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.357546" elapsed="0.207128"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Status da Alteração: ${resposta.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.565108" elapsed="0.002094"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Mensagem: ${resposta.json()['message']}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.567691" elapsed="0.002525"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${resposta.json()['message']}</arg>
+<arg>Registro excluído com sucesso</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.570784" elapsed="0.002190"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:52.356589" elapsed="0.216820"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:52.347943" elapsed="0.226306"/>
+</test>
+<test id="s1-s1-t6" name="Cenário 06: Validar que o usuário excluído não existe mais" line="25">
+<kw name="Verificar se o DELETE funcionou" owner="CompassServerest">
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2026-03-19T10:46:52.786576" level="INFO">GET Request : url=https://compassuol.serverest.dev/usuarios/bGra2vAoPYcg6z2U 
+ path_url=/usuarios/bGra2vAoPYcg6z2U 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'accept': 'application/json', 'Connection': 'keep-alive', 'Content-Type': 'application/json'} 
+ body=None 
+ </msg>
+<msg time="2026-03-19T10:46:52.787081" level="INFO">GET Response : url=https://compassuol.serverest.dev/usuarios/bGra2vAoPYcg6z2U 
+ status=400, reason=Bad Request 
+ headers={'access-control-allow-origin': '*', 'x-dns-prefetch-control': 'off', 'x-frame-options': 'SAMEORIGIN', 'strict-transport-security': 'max-age=15552000; includeSubDomains', 'x-download-options': 'noopen', 'x-content-type-options': 'nosniff', 'x-xss-protection': '1; mode=block', 'content-type': 'application/json; charset=utf-8', 'x-cloud-trace-context': '04d9d82e8516d3338f75c737f95dfe54', 'date': 'Thu, 19 Mar 2026 13:46:53 GMT', 'server': 'Google Frontend', 'Content-Length': '45'} 
+ body={
+    "message": "Usuário não encontrado"
+} 
+ </msg>
+<msg time="2026-03-19T10:46:52.787611" level="INFO">${resposta} = &lt;Response [400]&gt;</msg>
+<var>${resposta}</var>
+<arg>alias=ServeRest</arg>
+<arg>url=/usuarios/${ID_USUARIO_CRIADO}</arg>
+<arg>expected_status=400</arg>
+<arg>verify=${False}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.590375" elapsed="0.197451"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${resposta.json()['message']}</arg>
+<arg>Usuário não encontrado</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.788225" elapsed="0.001446"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Confirmação: O usuário sumiu do sistema com sucesso!</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.789887" elapsed="0.001069"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:52.589736" elapsed="0.201433"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:52.583011" elapsed="0.208512"/>
+</test>
+<test id="s1-s1-t7" name="Cenário 07: Verificar se tem regras de adição de usuário" line="28">
+<kw name="Adicionar usuário com e-mail inválido" owner="CompassServerest">
+<kw name="Generate Random String" owner="String">
+<msg time="2026-03-19T10:46:52.801801" level="INFO">${palavra_aleatoria} = XjfU</msg>
+<var>${palavra_aleatoria}</var>
+<arg>length=4</arg>
+<arg>chars=[LETTERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.801530" elapsed="0.000401"/>
+</kw>
+<kw name="Convert To Lower Case" owner="String">
+<msg time="2026-03-19T10:46:52.802462" level="INFO">${palavra_aleatoria} = xjfu</msg>
+<var>${palavra_aleatoria}</var>
+<arg>${palavra_aleatoria}</arg>
+<doc>Converts string to lower case.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.802085" elapsed="0.000582"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<arg>${EMAIL_TEST}</arg>
+<arg>${palavra_aleatoria}$@emailtest.com</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.802829" elapsed="0.000414"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-19T10:46:52.803731" level="INFO">${body} = {'nome': 'Fulano Errado', 'email': 'cbsq@emailtest.com', 'password': '1234', 'administrador': 'true'}</msg>
+<var>${body}</var>
+<arg>nome=Fulano Errado</arg>
+<arg>email=${EMAIL_TEST}</arg>
+<arg>password=1234</arg>
+<arg>administrador=true</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.803374" elapsed="0.000476"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-03-19T10:46:53.322248" level="INFO">POST Request : url=https://compassuol.serverest.dev/usuarios 
+ path_url=/usuarios 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'accept': 'application/json', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '101'} 
+ body=b'{"nome": "Fulano Errado", "email": "cbsq@emailtest.com", "password": "1234", "administrador": "true"}' 
+ </msg>
+<msg time="2026-03-19T10:46:53.322686" level="INFO">POST Response : url=https://compassuol.serverest.dev/usuarios 
+ status=201, reason=Created 
+ headers={'access-control-allow-origin': '*', 'x-dns-prefetch-control': 'off', 'x-frame-options': 'SAMEORIGIN', 'strict-transport-security': 'max-age=15552000; includeSubDomains', 'x-download-options': 'noopen', 'x-content-type-options': 'nosniff', 'x-xss-protection': '1; mode=block', 'content-type': 'application/json; charset=utf-8', 'x-cloud-trace-context': 'f8f90a7780bc6c808f75c737f95df701', 'date': 'Thu, 19 Mar 2026 13:46:53 GMT', 'server': 'Google Frontend', 'Content-Length': '82'} 
+ body={
+    "message": "Cadastro realizado com sucesso",
+    "_id": "1agED4991RLYRxkG"
+} 
+ </msg>
+<msg time="2026-03-19T10:46:53.322899" level="INFO">${resposta} = &lt;Response [201]&gt;</msg>
+<var>${resposta}</var>
+<arg>alias=ServeRest</arg>
+<arg>url=/usuarios</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=any</arg>
+<arg>verify=${False}</arg>
+<arg>allow_redirects=${False}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-19T10:46:52.803976" elapsed="0.519025"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nStatus recebido: ${resposta.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.323215" elapsed="0.000979"/>
+</kw>
+<if>
+<branch type="IF" condition="${resposta.status_code} == 201">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-19T10:46:53.326176" level="INFO">${id_criado} = 1agED4991RLYRxkG</msg>
+<var>${id_criado}</var>
+<arg>${resposta.json()['_id']}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.325304" elapsed="0.001067"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-03-19T10:46:53.326907" level="INFO">${ID_USUARIO_CRIADO} = 1agED4991RLYRxkG</msg>
+<arg>${ID_USUARIO_CRIADO}</arg>
+<arg>${id_criado}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.326539" elapsed="0.000489"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>ALERTA: Usuário criado indevidamente com ID: ${id_criado}.</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.327155" elapsed="0.000610"/>
+</kw>
+<kw name="Deleta usuário caso exista" owner="CompassServerest">
+<if>
+<branch type="IF" condition="$ID_USUARIO_CRIADO != $None and $ID_USUARIO_CRIADO != ''">
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Limpando base: Deletando usuário ID ${ID_USUARIO_CRIADO}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.328563" elapsed="0.000462"/>
+</kw>
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="DELETE On Session" owner="RequestsLibrary">
+<msg time="2026-03-19T10:46:53.529965" level="INFO">DELETE Request : url=https://compassuol.serverest.dev/usuarios/1agED4991RLYRxkG 
+ path_url=/usuarios/1agED4991RLYRxkG 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'accept': 'application/json', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-03-19T10:46:53.530418" level="INFO">DELETE Response : url=https://compassuol.serverest.dev/usuarios/1agED4991RLYRxkG 
+ status=200, reason=OK 
+ headers={'access-control-allow-origin': '*', 'x-dns-prefetch-control': 'off', 'x-frame-options': 'SAMEORIGIN', 'strict-transport-security': 'max-age=15552000; includeSubDomains', 'x-download-options': 'noopen', 'x-content-type-options': 'nosniff', 'x-xss-protection': '1; mode=block', 'content-type': 'application/json; charset=utf-8', 'x-cloud-trace-context': 'dacfdf8caf797c458f75c737f95df82b', 'date': 'Thu, 19 Mar 2026 13:46:53 GMT', 'server': 'Google Frontend', 'Content-Length': '51'} 
+ body={
+    "message": "Registro excluído com sucesso"
+} 
+ </msg>
+<arg>alias=ServeRest</arg>
+<arg>url=/usuarios/${ID_USUARIO_CRIADO}</arg>
+<arg>verify=${False}</arg>
+<doc>Sends a DELETE request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.329600" elapsed="0.201159"/>
+</kw>
+<arg>DELETE On Session</arg>
+<arg>alias=ServeRest</arg>
+<arg>url=/usuarios/${ID_USUARIO_CRIADO}</arg>
+<arg>verify=${False}</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.329174" elapsed="0.201856"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-03-19T10:46:53.532462" level="INFO">${ID_USUARIO_CRIADO} = None</msg>
+<arg>${ID_USUARIO_CRIADO}</arg>
+<arg>${None}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.531404" elapsed="0.001363"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:53.328265" elapsed="0.204706"/>
+</branch>
+<status status="PASS" start="2026-03-19T10:46:53.328243" elapsed="0.204843"/>
+</if>
+<status status="PASS" start="2026-03-19T10:46:53.327981" elapsed="0.205248"/>
+</kw>
+<kw name="Fail" owner="BuiltIn">
+<msg time="2026-03-19T10:46:53.534394" level="FAIL">BUG: A API aceitou um e-mail com caractere especial inválido ($).</msg>
+<arg>BUG: A API aceitou um e-mail com caractere especial inválido ($).</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="FAIL" start="2026-03-19T10:46:53.533520" elapsed="0.008725">BUG: A API aceitou um e-mail com caractere especial inválido ($).</status>
+</kw>
+<status status="FAIL" start="2026-03-19T10:46:53.324577" elapsed="0.218011">BUG: A API aceitou um e-mail com caractere especial inválido ($).</status>
+</branch>
+<branch type="ELSE IF" condition="${resposta.status_code} == 400">
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Sucesso: A API barrou o cadastro conforme esperado.</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="NOT RUN" start="2026-03-19T10:46:53.543363" elapsed="0.000562"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${resposta.json()['email']}</arg>
+<arg>email deve ser um email válido</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="NOT RUN" start="2026-03-19T10:46:53.544317" elapsed="0.000335"/>
+</kw>
+<status status="NOT RUN" start="2026-03-19T10:46:53.542742" elapsed="0.002158"/>
+</branch>
+<branch type="ELSE">
+<kw name="Fail" owner="BuiltIn">
+<arg>A API retornou um status inesperado: ${resposta.status_code}</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" start="2026-03-19T10:46:53.545394" elapsed="0.000305"/>
+</kw>
+<status status="NOT RUN" start="2026-03-19T10:46:53.545039" elapsed="0.000894"/>
+</branch>
+<status status="FAIL" start="2026-03-19T10:46:53.324489" elapsed="0.221557">BUG: A API aceitou um e-mail com caractere especial inválido ($).</status>
+</if>
+<status status="FAIL" start="2026-03-19T10:46:52.801180" elapsed="0.745112">BUG: A API aceitou um e-mail com caractere especial inválido ($).</status>
+</kw>
+<status status="FAIL" start="2026-03-19T10:46:52.796490" elapsed="0.750566">BUG: A API aceitou um e-mail com caractere especial inválido ($).</status>
+</test>
+<test id="s1-s1-t8" name="Cenário 08: Adiciona um usuário com números no nome" line="31">
+<kw name="Adicionar usuário com números no nome" owner="CompassServerest">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-19T10:46:53.565272" level="INFO">${body} = {'nome': 'Fulano 134', 'email': 'cbsq@emailtest.com', 'password': '1234', 'administrador': 'true'}</msg>
+<var>${body}</var>
+<arg>nome=Fulano 134</arg>
+<arg>email=${EMAIL_TEST}</arg>
+<arg>password=1234</arg>
+<arg>administrador=true</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.564764" elapsed="0.000666"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-03-19T10:46:53.769131" level="INFO">POST Request : url=https://compassuol.serverest.dev/usuarios 
+ path_url=/usuarios 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'accept': 'application/json', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '98'} 
+ body=b'{"nome": "Fulano 134", "email": "cbsq@emailtest.com", "password": "1234", "administrador": "true"}' 
+ </msg>
+<msg time="2026-03-19T10:46:53.769368" level="INFO">POST Response : url=https://compassuol.serverest.dev/usuarios 
+ status=201, reason=Created 
+ headers={'access-control-allow-origin': '*', 'x-dns-prefetch-control': 'off', 'x-frame-options': 'SAMEORIGIN', 'strict-transport-security': 'max-age=15552000; includeSubDomains', 'x-download-options': 'noopen', 'x-content-type-options': 'nosniff', 'x-xss-protection': '1; mode=block', 'content-type': 'application/json; charset=utf-8', 'x-cloud-trace-context': 'c030fd3efe303aec8f75c737f95dfba8', 'date': 'Thu, 19 Mar 2026 13:46:54 GMT', 'server': 'Google Frontend', 'Content-Length': '82'} 
+ body={
+    "message": "Cadastro realizado com sucesso",
+    "_id": "BJVChMm7tPd804lJ"
+} 
+ </msg>
+<msg time="2026-03-19T10:46:53.769789" level="INFO">${resposta} = &lt;Response [201]&gt;</msg>
+<var>${resposta}</var>
+<arg>alias=ServeRest</arg>
+<arg>url=/usuarios</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=any</arg>
+<arg>verify=${False}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.565583" elapsed="0.204520"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nStatus recebido: ${resposta.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.770397" elapsed="0.001244"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Resposta: ${resposta.text}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.771863" elapsed="0.000887"/>
+</kw>
+<if>
+<branch type="IF" condition="${resposta.status_code} == 201">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-19T10:46:53.773884" level="INFO">${id_criado} = BJVChMm7tPd804lJ</msg>
+<var>${id_criado}</var>
+<arg>${resposta.json()['_id']}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.773384" elapsed="0.000656"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-03-19T10:46:53.774522" level="INFO">${ID_USUARIO_CRIADO} = BJVChMm7tPd804lJ</msg>
+<arg>${ID_USUARIO_CRIADO}</arg>
+<arg>${id_criado}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.774167" elapsed="0.000804"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>ALERTA: O sistema aceitou números no nome. ID: ${id_criado}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.775103" elapsed="0.000518"/>
+</kw>
+<kw name="Deleta usuário caso exista" owner="CompassServerest">
+<if>
+<branch type="IF" condition="$ID_USUARIO_CRIADO != $None and $ID_USUARIO_CRIADO != ''">
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Limpando base: Deletando usuário ID ${ID_USUARIO_CRIADO}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.776414" elapsed="0.000421"/>
+</kw>
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="DELETE On Session" owner="RequestsLibrary">
+<msg time="2026-03-19T10:46:53.974529" level="INFO">DELETE Request : url=https://compassuol.serverest.dev/usuarios/BJVChMm7tPd804lJ 
+ path_url=/usuarios/BJVChMm7tPd804lJ 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'accept': 'application/json', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-03-19T10:46:53.974784" level="INFO">DELETE Response : url=https://compassuol.serverest.dev/usuarios/BJVChMm7tPd804lJ 
+ status=200, reason=OK 
+ headers={'access-control-allow-origin': '*', 'x-dns-prefetch-control': 'off', 'x-frame-options': 'SAMEORIGIN', 'strict-transport-security': 'max-age=15552000; includeSubDomains', 'x-download-options': 'noopen', 'x-content-type-options': 'nosniff', 'x-xss-protection': '1; mode=block', 'content-type': 'application/json; charset=utf-8', 'x-cloud-trace-context': 'c87ba5732aa103a38f75c737f95df82c', 'date': 'Thu, 19 Mar 2026 13:46:54 GMT', 'server': 'Google Frontend', 'Content-Length': '51'} 
+ body={
+    "message": "Registro excluído com sucesso"
+} 
+ </msg>
+<arg>alias=ServeRest</arg>
+<arg>url=/usuarios/${ID_USUARIO_CRIADO}</arg>
+<arg>verify=${False}</arg>
+<doc>Sends a DELETE request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.777448" elapsed="0.197503"/>
+</kw>
+<arg>DELETE On Session</arg>
+<arg>alias=ServeRest</arg>
+<arg>url=/usuarios/${ID_USUARIO_CRIADO}</arg>
+<arg>verify=${False}</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.777003" elapsed="0.198089"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-03-19T10:46:53.975844" level="INFO">${ID_USUARIO_CRIADO} = None</msg>
+<arg>${ID_USUARIO_CRIADO}</arg>
+<arg>${None}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-03-19T10:46:53.975260" elapsed="0.000754"/>
+</kw>
+<status status="PASS" start="2026-03-19T10:46:53.776165" elapsed="0.199962"/>
+</branch>
+<status status="PASS" start="2026-03-19T10:46:53.776144" elapsed="0.200034"/>
+</if>
+<status status="PASS" start="2026-03-19T10:46:53.775879" elapsed="0.200367"/>
+</kw>
+<kw name="Fail" owner="BuiltIn">
+<msg time="2026-03-19T10:46:53.976798" level="FAIL">BUG: A API aceitou o cadastro de um usuário com números no nome (Status 201).</msg>
+<arg>BUG: A API aceitou o cadastro de um usuário com números no nome (Status 201).</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="FAIL" start="2026-03-19T10:46:53.976385" elapsed="0.004505">BUG: A API aceitou o cadastro de um usuário com números no nome (Status 201).</status>
+</kw>
+<status status="FAIL" start="2026-03-19T10:46:53.772957" elapsed="0.208138">BUG: A API aceitou o cadastro de um usuário com números no nome (Status 201).</status>
+</branch>
+<branch type="ELSE IF" condition="${resposta.status_code} == 400">
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Sucesso: A API barrou o nome com números conforme esperado.</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="NOT RUN" start="2026-03-19T10:46:53.981530" elapsed="0.000175"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${resposta.text}</arg>
+<arg>nome</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="NOT RUN" start="2026-03-19T10:46:53.981900" elapsed="0.000112"/>
+</kw>
+<status status="NOT RUN" start="2026-03-19T10:46:53.981166" elapsed="0.000945"/>
+</branch>
+<branch type="ELSE">
+<kw name="Fail" owner="BuiltIn">
+<arg>A API retornou um status inesperado: ${resposta.status_code}</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" start="2026-03-19T10:46:53.982291" elapsed="0.000082"/>
+</kw>
+<status status="NOT RUN" start="2026-03-19T10:46:53.982162" elapsed="0.000285"/>
+</branch>
+<status status="FAIL" start="2026-03-19T10:46:53.772914" elapsed="0.209569">BUG: A API aceitou o cadastro de um usuário com números no nome (Status 201).</status>
+</if>
+<status status="FAIL" start="2026-03-19T10:46:53.564308" elapsed="0.418274">BUG: A API aceitou o cadastro de um usuário com números no nome (Status 201).</status>
+</kw>
+<status status="FAIL" start="2026-03-19T10:46:53.558338" elapsed="0.424596">BUG: A API aceitou o cadastro de um usuário com números no nome (Status 201).</status>
+</test>
+<status status="FAIL" start="2026-03-19T10:46:50.283933" elapsed="3.705413"/>
+</suite>
+<status status="FAIL" start="2026-03-19T10:46:50.243306" elapsed="3.752256"/>
+</suite>
+<statistics>
+<total>
+<stat pass="6" fail="2" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Challenge3" id="s1" pass="6" fail="2" skip="0">Challenge3</stat>
+<stat name="CompassServerest" id="s1-s1" pass="6" fail="2" skip="0">Challenge3.CompassServerest</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
