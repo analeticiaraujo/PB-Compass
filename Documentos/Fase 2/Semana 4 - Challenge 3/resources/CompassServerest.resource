@@ -3,9 +3,6 @@ Library  RequestsLibrary
 Library  String
 
 *** Variables ***
-${body}
-${headers}
-${resposta}
 ${EMAIL_TEST}
 ${ID_USUARIO_CRIADO}
 
@@ -139,7 +136,7 @@ Adicionar usuário com e-mail inválido
     # Gera e-mail com caractere inválido
     ${palavra_aleatoria}    Generate Random String    length=4    chars=[LETTERS]
     ${palavra_aleatoria}    Convert To Lower Case     ${palavra_aleatoria}
-    Set Variable    ${EMAIL_TEST}    ${palavra_aleatoria}$@emailtest.com
+    Set Local Variable    ${EMAIL_TEST}    ${palavra_aleatoria}$@emailtest.com
 
     ${body}    Create Dictionary  
     ...    nome=Fulano Errado  
@@ -222,3 +219,131 @@ Deleta usuário caso exista
         Run Keyword And Ignore Error    DELETE On Session    alias=ServeRest    url=/usuarios/${ID_USUARIO_CRIADO}  verify=${False}
         Set Global Variable    ${ID_USUARIO_CRIADO}    ${None}
     END
+
+Listar todos os usuários
+    ${resposta}    GET On Session
+    ...    alias=ServeRest
+    ...    url=/usuarios
+    ...    expected_status=200
+    ...    verify=${False}
+
+    Log To Console    \nTotal de usuários: ${resposta.json()['quantidade']}
+
+    Should Contain    ${resposta.json()}    quantidade
+    Should Contain    ${resposta.json()}    usuarios
+    Should Be True    ${resposta.json()['quantidade']} >= 0
+
+Criar usuário via PUT (upsert)
+    ${palavra_aleatoria}    Generate Random String    length=4    chars=[LETTERS]
+    ${palavra_aleatoria}    Convert To Lower Case    ${palavra_aleatoria}
+    ${email_upsert}    Set Variable    upsert_${palavra_aleatoria}@emailtest.com
+
+    ${body}    Create Dictionary
+    ...    nome=Fulano Upsert
+    ...    email=${email_upsert}
+    ...    password=1234
+    ...    administrador=true
+
+    ${resposta}    PUT On Session
+    ...    alias=ServeRest
+    ...    url=/usuarios/id_inexistente_upsert
+    ...    json=${body}
+    ...    expected_status=201
+    ...    verify=${False}
+
+    Log To Console    \nUsuário criado via PUT. ID: ${resposta.json()['_id']}
+    Should Be Equal As Strings    ${resposta.json()['message']}    Cadastro realizado com sucesso
+
+    ${id_upsert}    Set Variable    ${resposta.json()['_id']}
+    Run Keyword And Ignore Error    DELETE On Session    alias=ServeRest    url=/usuarios/${id_upsert}    verify=${False}
+
+Deletar usuário com ID inexistente
+    ${resposta}    DELETE On Session
+    ...    alias=ServeRest
+    ...    url=/usuarios/id_que_nao_existe_xyz
+    ...    expected_status=200
+    ...    verify=${False}
+
+    Log To Console    \nMensagem: ${resposta.json()['message']}
+    Should Be Equal As Strings    ${resposta.json()['message']}    Nenhum registro excluído
+
+Cadastrar usuário sem campo nome
+    ${palavra_aleatoria}    Generate Random String    length=4    chars=[LETTERS]
+    ${palavra_aleatoria}    Convert To Lower Case    ${palavra_aleatoria}
+
+    ${body}    Create Dictionary
+    ...    email=${palavra_aleatoria}@emailtest.com
+    ...    password=1234
+    ...    administrador=true
+
+    ${resposta}    POST On Session
+    ...    alias=ServeRest
+    ...    url=/usuarios
+    ...    json=${body}
+    ...    expected_status=400
+    ...    verify=${False}
+
+    Log To Console    \nResposta: ${resposta.text}
+    Should Be Equal As Strings    ${resposta.json()['nome']}    nome é obrigatório
+
+Cadastrar usuário sem campo password
+    ${palavra_aleatoria}    Generate Random String    length=4    chars=[LETTERS]
+    ${palavra_aleatoria}    Convert To Lower Case    ${palavra_aleatoria}
+
+    ${body}    Create Dictionary
+    ...    nome=Fulano Sem Senha
+    ...    email=${palavra_aleatoria}@emailtest.com
+    ...    administrador=true
+
+    ${resposta}    POST On Session
+    ...    alias=ServeRest
+    ...    url=/usuarios
+    ...    json=${body}
+    ...    expected_status=400
+    ...    verify=${False}
+
+    Log To Console    \nResposta: ${resposta.text}
+    Should Be Equal As Strings    ${resposta.json()['password']}    password é obrigatório
+
+Cadastrar usuário sem campo administrador
+    ${palavra_aleatoria}    Generate Random String    length=4    chars=[LETTERS]
+    ${palavra_aleatoria}    Convert To Lower Case    ${palavra_aleatoria}
+
+    ${body}    Create Dictionary
+    ...    nome=Fulano Sem Admin
+    ...    email=${palavra_aleatoria}@emailtest.com
+    ...    password=1234
+
+    ${resposta}    POST On Session
+    ...    alias=ServeRest
+    ...    url=/usuarios
+    ...    json=${body}
+    ...    expected_status=400
+    ...    verify=${False}
+
+    Log To Console    \nResposta: ${resposta.text}
+    Should Be Equal As Strings    ${resposta.json()['administrador']}    administrador é obrigatório
+
+Cadastrar usuário não administrador
+    ${palavra_aleatoria}    Generate Random String    length=4    chars=[LETTERS]
+    ${palavra_aleatoria}    Convert To Lower Case    ${palavra_aleatoria}
+    ${email_nao_admin}    Set Variable    ${palavra_aleatoria}@emailtest.com
+
+    ${body}    Create Dictionary
+    ...    nome=Fulano Nao Admin
+    ...    email=${email_nao_admin}
+    ...    password=1234
+    ...    administrador=false
+
+    ${resposta}    POST On Session
+    ...    alias=ServeRest
+    ...    url=/usuarios
+    ...    json=${body}
+    ...    expected_status=201
+    ...    verify=${False}
+
+    Log To Console    \nUsuário não-admin criado. ID: ${resposta.json()['_id']}
+    Should Be Equal As Strings    ${resposta.json()['message']}    Cadastro realizado com sucesso
+
+    ${id_nao_admin}    Set Variable    ${resposta.json()['_id']}
+    Run Keyword And Ignore Error    DELETE On Session    alias=ServeRest    url=/usuarios/${id_nao_admin}    verify=${False}
