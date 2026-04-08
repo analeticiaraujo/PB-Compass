@@ -2,8 +2,13 @@
 Resource    variaveis.resource
 
 *** Variables ***
-${END_LOGIN}              /login
-${SENHA_INVALIDA}         senha_errada_xyz
+${END_LOGIN}                  /login
+${SENHA_INVALIDA}             senha_errada_xyz
+${SENHA_EM_BRANCO}            ${EMPTY}
+${MSG_LOGIN_SUCESSO}          Login realizado com sucesso
+${MSG_LOGIN_INVALIDO}         Email e/ou senha inválidos
+${MSG_LOGIN_SENHA_BRANCO}     Email e/ou senha inválidos
+${PREFIXO_TOKEN}              Bearer
 
 *** Keywords ***
 # ─── HELPERS PRIVADOS ────────────────────────────────────────────────────────
@@ -14,30 +19,51 @@ Criar Body de Login
     ${body}    Create Dictionary    email=${email}    password=${password}
     RETURN    ${body}
 
-# ─── KEYWORDS DE TESTE ───────────────────────────────────────────────────────
-
-Autenticar Usuario E Retornar Token
-    [Documentation]    POST /login com credenciais válidas. Retorna o bearer token.
-    [Arguments]    ${email}    ${password}=${SENHA_PADRAO}
+Executar POST Login
+    [Documentation]    Executa POST /login e retorna a resposta.
+    [Arguments]    ${email}    ${password}    ${status_esperado}=200
     ${body}    Criar Body de Login    ${email}    ${password}
     ${resposta}    POST On Session
     ...    alias=${ALIAS}
     ...    url=${END_LOGIN}
     ...    json=${body}
-    ...    expected_status=200
+    ...    expected_status=${status_esperado}
     ...    verify=${False}
-    Should Be Equal As Strings    ${resposta.json()['message']}    Login realizado com sucesso
+    RETURN    ${resposta}
+
+# ─── KEYWORDS DE TESTE ───────────────────────────────────────────────────────
+
+Autenticar Usuario E Retornar Token
+    [Documentation]    CT01 — POST /login com credenciais válidas. Retorna o bearer token.
+    [Arguments]    ${email}    ${password}=${SENHA_PADRAO}
+    ${resposta}    Executar POST Login    ${email}    ${password}
+    Should Be Equal As Strings    ${resposta.json()['message']}    ${MSG_LOGIN_SUCESSO}
     Should Not Be Empty    ${resposta.json()['authorization']}
     RETURN    ${resposta.json()['authorization']}
 
-Autenticar Com Senha Invalida E Validar Rejeicao
-    [Documentation]    POST /login com senha errada deve retornar 401 com mensagem de erro.
+Autenticar Com Email Invalido E Validar Rejeicao
+    [Documentation]    CT02 — POST /login com e-mail inválido deve retornar 401.
+    [Arguments]    ${email_invalido}=nao_existe@fake.com
+    ${resposta}    Executar POST Login    ${email_invalido}    ${SENHA_PADRAO}    status_esperado=401
+    Should Be Equal As Strings    ${resposta.json()['message']}    ${MSG_LOGIN_INVALIDO}
+
+Autenticar Com Senha Em Branco E Validar Rejeicao
+    [Documentation]    CT03 — POST /login com senha vazia deve retornar 400.
     [Arguments]    ${email}
-    ${body}    Criar Body de Login    ${email}    ${SENHA_INVALIDA}
-    ${resposta}    POST On Session
-    ...    alias=${ALIAS}
-    ...    url=${END_LOGIN}
-    ...    json=${body}
-    ...    expected_status=401
-    ...    verify=${False}
-    Should Be Equal As Strings    ${resposta.json()['message']}    Email e/ou senha inválidos
+    ${resposta}    Executar POST Login    ${email}    ${SENHA_EM_BRANCO}    status_esperado=400
+    Should Contain    ${resposta.json()}    password
+
+Validar Contrato Do Token De Autenticacao
+    [Documentation]    CT04 — Valida que o token retornado segue o contrato: campo 'authorization'
+    ...                 presente, não vazio e com prefixo Bearer.
+    [Arguments]    ${email}    ${password}=${SENHA_PADRAO}
+    ${resposta}    Executar POST Login    ${email}    ${password}
+    Should Be Equal As Strings    ${resposta.json()['message']}    ${MSG_LOGIN_SUCESSO}
+    ${token}    Set Variable    ${resposta.json()['authorization']}
+    Should Not Be Empty    ${token}
+    ...    msg=CONTRATO QUEBRADO — campo 'authorization' está vazio.
+    ${tipo_token}    Evaluate    type($token).__name__
+    Should Be Equal As Strings    ${tipo_token}    str
+    ...    msg=CONTRATO QUEBRADO — 'authorization' esperado str, recebido ${tipo_token}.
+    Should Start With    ${token}    ${PREFIXO_TOKEN}
+    ...    msg=CONTRATO QUEBRADO — token não inicia com '${PREFIXO_TOKEN}'. Valor: ${token}

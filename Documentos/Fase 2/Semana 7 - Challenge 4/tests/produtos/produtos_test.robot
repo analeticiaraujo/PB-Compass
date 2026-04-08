@@ -7,7 +7,8 @@ Suite Setup       Preparar Suite De Produtos
 Suite Teardown    Limpar Suite De Produtos
 
 *** Variables ***
-${TOKEN_ADMIN}    ${EMPTY}
+${TOKEN_ADMIN}          ${EMPTY}
+${NOME_PRODUTO_CT05}    ${EMPTY}
 
 *** Keywords ***
 Preparar Suite De Produtos
@@ -23,13 +24,27 @@ Limpar Suite De Produtos
     Limpar Usuario Criado
 
 *** Test Cases ***
-Cenário 01: Listar todos os produtos
-    [Documentation]    GET /produtos deve retornar 200 com campos 'quantidade' e 'produtos'.
-    [Tags]    produtos    smoke
-    Listar Produtos E Validar Estrutura Da Resposta
-
-Cenário 02: Cadastrar produto com token de administrador
+CT05: Cadastrar produto com token de administrador
     [Documentation]    POST /produtos com token válido deve retornar 201 e persistir o ID.
-    [Tags]    produtos    smoke    crud
+    [Tags]    produtos    smoke    crud    ct05
+    [Teardown]    Limpar Produto Criado
     Cadastrar Produto E Validar Criacao    ${TOKEN_ADMIN}
     Should Not Be Empty    ${ID_PRODUTO_CRIADO}
+
+CT06: Cadastrar produto com nome duplicado deve ser rejeitado
+    [Documentation]    POST /produtos com nome já existente deve retornar 400.
+    [Tags]    produtos    negativo    ct06
+    [Setup]     Cadastrar Produto E Validar Criacao    ${TOKEN_ADMIN}
+    [Teardown]  Limpar Produto Criado
+    ${nome_do_produto}    Set Variable    ${NOME_PRODUTO_PADRAO}
+    Cadastrar Produto Com Nome Duplicado E Validar Conflito    ${TOKEN_ADMIN}    ${nome_do_produto}
+
+CT07: Cadastrar produto com preço negativo deve ser rejeitado
+    [Documentation]    POST /produtos com preco negativo deve retornar 400.
+    [Tags]    produtos    negativo    ct07
+    Cadastrar Produto Com Preco Negativo E Validar Rejeicao    ${TOKEN_ADMIN}
+
+CT08: Cadastrar produto sem descrição deve ser rejeitado
+    [Documentation]    POST /produtos sem campo 'descricao' deve retornar 400.
+    [Tags]    produtos    negativo    validacao    ct08
+    Cadastrar Produto Sem Descricao E Validar Rejeicao    ${TOKEN_ADMIN}

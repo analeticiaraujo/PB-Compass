@@ -1,0 +1,5 @@
+robotframework>=7.0
+robotframework-requests>=0.9.7
+robotframework-faker>=5.0.0
+robotframework-pabot>=2.18.0
+Faker>=24.0.0

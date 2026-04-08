@@ -1,29 +1,20 @@
 *** Settings ***
 Resource    variaveis.resource
+Resource    common.resource
 
 *** Variables ***
-${NOME_DUPLICADO}         Fulano Replicado
-${SENHA_DUPLICADO}        654321
-${NOME_ATUALIZADO}        Fulano de Tal Atualizado
-${SENHA_ATUALIZADA}       nova_senha_123
-${NOME_UPSERT}            Fulano Upsert
-${ID_UPSERT_FAKE}         id_inexistente_upsert
-${ID_DELETE_FAKE}         id_que_nao_existe_xyz
+${NOME_DUPLICADO}            Fulano Replicado
+${SENHA_DUPLICADO}           654321
+${NOME_ATUALIZADO}           ${EMPTY}
+${SENHA_ATUALIZADA}          ${EMPTY}
+${NOME_UPSERT}               ${EMPTY}
+${ID_UPSERT_FAKE}            id_inexistente_upsert
+${ID_DELETE_FAKE}            id_que_nao_existe_xyz
 ${EMAIL_INVALIDO_PREFIXO}    invalido$$especial
-${NOME_COM_NUMERO}        Fulano 134
+${NOME_COM_NUMERO}           Fulano 134
 
 *** Keywords ***
 # ─── SETUP / TEARDOWN ────────────────────────────────────────────────────────
-
-Criar Sessão na ServeRest
-    [Documentation]    Cria a sessão HTTP reutilizável para toda a suite.
-    ${headers}    Create Dictionary    accept=application/json    Content-Type=application/json
-    Create Session
-    ...    alias=${ALIAS}
-    ...    url=${BASE_URL}
-    ...    headers=${headers}
-    ...    verify=False
-    ...    disable_warnings=1
 
 Deletar Usuario Por ID
     [Documentation]    Remove um usuário pelo ID informado, ignorando erros.
@@ -31,7 +22,7 @@ Deletar Usuario Por ID
     Run Keyword And Ignore Error    DELETE On Session    alias=${ALIAS}    url=/usuarios/${id}    verify=${False}
 
 Limpar Usuario Criado
-    [Documentation]    Teardown global: remove ${ID_USUARIO_CRIADO} se existir e reseta a variável.
+    [Documentation]    Teardown: remove ${ID_USUARIO_CRIADO} se existir e reseta a variável.
     IF    $ID_USUARIO_CRIADO != $None and $ID_USUARIO_CRIADO != ''
         Log    Limpando base: Deletando usuário ID ${ID_USUARIO_CRIADO}
         Deletar Usuario Por ID    ${ID_USUARIO_CRIADO}
@@ -39,13 +30,6 @@ Limpar Usuario Criado
     END
 
 # ─── HELPERS PRIVADOS ────────────────────────────────────────────────────────
-
-Gerar Email Aleatorio
-    [Documentation]    Retorna um e-mail único no formato xxxxxx@emailtest.com.
-    ${sufixo}    Generate Random String    length=6    chars=[LETTERS][NUMBERS]
-    ${sufixo}    Convert To Lower Case    ${sufixo}
-    ${email}    Set Variable    ${sufixo}${DOMINIO_EMAIL}
-    RETURN    ${email}
 
 Criar Body de Usuario
     [Documentation]    Monta e retorna o dicionário padrão de payload de usuário.
@@ -72,12 +56,16 @@ Executar POST Usuario
 # ─── SETUP DE MASSA ──────────────────────────────────────────────────────────
 
 Criar E Cadastrar Usuario
-    [Documentation]    Gera e-mail, cria body e registra o usuário. Persiste ID e e-mail na suite.
-    ${email}    Gerar Email Aleatorio
-    Set Suite Variable    ${EMAIL_TEST}    ${email}
+    [Documentation]    Gera massa dinâmica via Faker, cadastra o usuário e persiste ID e e-mail
+    ...                 como variáveis de suite. Seguro para execução paralela.
+    ${massa}    Gerar Massa de Dados Dinâmica
+    Set Suite Variable    ${EMAIL_TEST}      ${massa}[email]
+    Set Suite Variable    ${SENHA_PADRAO}    ${massa}[password]
     ${body}    Criar Body de Usuario
+    ...    nome=${massa}[nome]
+    ...    email=${massa}[email]
+    ...    password=${massa}[password]
     ${resposta}    Executar POST Usuario    ${body}
-    Log    ${resposta.json()}
     Should Be Equal As Strings    ${resposta.json()['message']}    Cadastro realizado com sucesso
     Should Not Be Empty    ${resposta.json()['_id']}
     Set Suite Variable    ${ID_USUARIO_CRIADO}    ${resposta.json()['_id']}
@@ -106,7 +94,10 @@ Buscar Usuario Por ID E Validar Dados
     Should Contain    ${resposta.json()}    nome
 
 Atualizar Dados Do Usuario E Validar Confirmacao
-    [Documentation]    PUT /usuarios/{id} com novos dados e valida mensagem de sucesso.
+    [Documentation]    PUT /usuarios/{id} com dados Faker novos e valida mensagem de sucesso.
+    ${massa}    Gerar Massa de Dados Dinâmica
+    Set Suite Variable    ${NOME_ATUALIZADO}    ${massa}[nome]
+    Set Suite Variable    ${SENHA_ATUALIZADA}   ${massa}[password]
     ${body}    Criar Body de Usuario    nome=${NOME_ATUALIZADO}    password=${SENHA_ATUALIZADA}
     ${resposta}    PUT On Session
     ...    alias=${ALIAS}
@@ -158,8 +149,8 @@ Validar Rejeicao De Email Invalido
 
 Validar Rejeicao De Nome Com Numeros
     [Documentation]    BUG TEST — API deveria rejeitar nomes contendo dígitos numéricos.
-    ${email}    Gerar Email Aleatorio
-    ${body}    Criar Body de Usuario    nome=${NOME_COM_NUMERO}    email=${email}
+    ${massa}    Gerar Massa de Dados Dinâmica
+    ${body}    Criar Body de Usuario    nome=${NOME_COM_NUMERO}    email=${massa}[email]
     ${resposta}    POST On Session
     ...    alias=${ALIAS}
     ...    url=/usuarios
@@ -190,8 +181,9 @@ Listar Usuarios E Validar Estrutura Da Resposta
 
 Criar Usuario Via Upsert E Validar Criacao
     [Documentation]    PUT em ID inexistente deve criar o usuário (upsert) com status 201.
-    ${email}    Gerar Email Aleatorio
-    ${body}    Criar Body de Usuario    nome=${NOME_UPSERT}    email=${email}
+    ${massa}    Gerar Massa de Dados Dinâmica
+    Set Suite Variable    ${NOME_UPSERT}    ${massa}[nome]
+    ${body}    Criar Body de Usuario    nome=${NOME_UPSERT}    email=${massa}[email]
     ${resposta}    PUT On Session
     ...    alias=${ALIAS}
     ...    url=/usuarios/${ID_UPSERT_FAKE}
@@ -214,16 +206,20 @@ Deletar Usuario Com ID Inexistente E Validar Mensagem
 Cadastrar Usuario Com Campo Ausente E Validar Erro
     [Documentation]    POST sem um campo obrigatório e valida a mensagem de erro específica do campo.
     [Arguments]    ${campo_omitido}    ${mensagem_esperada}
-    ${email}    Gerar Email Aleatorio
-    ${body}    Criar Body de Usuario    email=${email}
+    ${massa}    Gerar Massa de Dados Dinâmica
+    ${body}    Criar Body de Usuario    email=${massa}[email]
     Remove From Dictionary    ${body}    ${campo_omitido}
     ${resposta}    Executar POST Usuario    ${body}    status_esperado=400
     Should Be Equal As Strings    ${resposta.json()['${campo_omitido}']}    ${mensagem_esperada}
 
 Cadastrar Usuario Nao Administrador E Validar Criacao
     [Documentation]    POST com administrador=false deve retornar 201 com mensagem de sucesso.
-    ${email}    Gerar Email Aleatorio
-    ${body}    Criar Body de Usuario    nome=Fulano Nao Admin    email=${email}    administrador=false
+    ${massa}    Gerar Massa de Dados Dinâmica
+    ${body}    Criar Body de Usuario
+    ...    nome=${massa}[nome]
+    ...    email=${massa}[email]
+    ...    password=${massa}[password]
+    ...    administrador=false
     ${resposta}    Executar POST Usuario    ${body}
     Should Be Equal As Strings    ${resposta.json()['message']}    Cadastro realizado com sucesso
     Should Not Be Empty    ${resposta.json()['_id']}

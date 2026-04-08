@@ -16,13 +16,23 @@ Preparar Suite De Login
     Set Suite Variable    ${EMAIL_LOGIN_TEST}    ${EMAIL_TEST}
 
 *** Test Cases ***
-Cenário 01: Login com credenciais válidas deve retornar token
+CT01: Login com credenciais válidas deve retornar token
     [Documentation]    POST /login com e-mail e senha válidos deve retornar 200 e bearer token.
-    [Tags]    login    smoke
+    [Tags]    login    smoke    ct01
     ${token}    Autenticar Usuario E Retornar Token    ${EMAIL_LOGIN_TEST}
     Should Not Be Empty    ${token}
 
-Cenário 02: Login com senha inválida deve ser rejeitado
-    [Documentation]    POST /login com senha errada deve retornar 401 com mensagem de erro.
-    [Tags]    login    negativo
-    Autenticar Com Senha Invalida E Validar Rejeicao    ${EMAIL_LOGIN_TEST}
+CT02: Login com e-mail inválido deve ser rejeitado
+    [Documentation]    POST /login com e-mail inexistente deve retornar 401.
+    [Tags]    login    negativo    ct02
+    Autenticar Com Email Invalido E Validar Rejeicao
+
+CT03: Login com senha em branco deve ser rejeitado
+    [Documentation]    POST /login com senha vazia deve retornar 400 com erro no campo password.
+    [Tags]    login    negativo    ct03
+    Autenticar Com Senha Em Branco E Validar Rejeicao    ${EMAIL_LOGIN_TEST}
+
+CT04: Contrato do token de autenticação deve ser válido
+    [Documentation]    Token retornado deve ser string não vazia com prefixo Bearer.
+    [Tags]    login    contrato    ct04
+    Validar Contrato Do Token De Autenticacao    ${EMAIL_LOGIN_TEST}

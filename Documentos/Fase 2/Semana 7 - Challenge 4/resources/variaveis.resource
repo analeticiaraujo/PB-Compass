@@ -11,3 +11,4 @@ ${SENHA_PADRAO}       1234
 ${DOMINIO_EMAIL}      @emailtest.com
 ${EMAIL_TEST}         ${EMPTY}
 ${ID_USUARIO_CRIADO}  ${NONE}
+${FAKER_LOCALE}       pt_BR
