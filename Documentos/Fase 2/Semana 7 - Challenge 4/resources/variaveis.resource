@@ -1,6 +1,7 @@
 *** Settings ***
 Library    RequestsLibrary
 Library    String
+Library    Collections
 
 *** Variables ***
 ${BASE_URL}           https://compassuol.serverest.dev
