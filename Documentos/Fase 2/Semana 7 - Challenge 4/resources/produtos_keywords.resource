@@ -60,12 +60,6 @@ Limpar Produto Criado
         Set Suite Variable    ${ID_PRODUTO_CRIADO}    ${NONE}
     END
 
-Gerar Nome De Produto Unico
-    [Documentation]    Usa FakerLibrary (via common.resource) para gerar nome de produto único.
-    ...                 Delegado ao common.resource — keyword definida lá.
-    ${nome}    Gerar Nome De Produto Unico
-    RETURN    ${nome}
-
 # ─── KEYWORDS DE TESTE ───────────────────────────────────────────────────────
 
 Listar Produtos E Validar Estrutura Da Resposta

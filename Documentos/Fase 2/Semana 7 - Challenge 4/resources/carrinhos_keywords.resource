@@ -1,5 +1,6 @@
 *** Settings ***
 Resource    variaveis.resource
+Resource    common.resource
 
 *** Variables ***
 ${END_CARRINHOS}              /carrinhos
