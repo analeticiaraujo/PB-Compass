@@ -48,3 +48,18 @@ CT08: Cadastrar produto sem descrição deve ser rejeitado
     [Documentation]    POST /produtos sem campo 'descricao' deve retornar 400.
     [Tags]    produtos    negativo    validacao    ct08
     Cadastrar Produto Sem Descricao E Validar Rejeicao    ${TOKEN_ADMIN}
+
+CT09: Cadastrar produto com quantidade zero deve ser rejeitado
+    [Documentation]    POST /produtos com quantidade=0 deve retornar 400 — estoque não pode ser zero.
+    [Tags]    produtos    negativo    validacao    ct09
+    Cadastrar Produto Com Quantidade Zero E Validar Rejeicao    ${TOKEN_ADMIN}
+
+CT10: Cadastrar produto com quantidade negativa deve ser rejeitado
+    [Documentation]    POST /produtos com quantidade negativa deve retornar 400 — estoque não pode ser negativo.
+    [Tags]    produtos    negativo    validacao    ct10
+    Cadastrar Produto Com Quantidade Negativa E Validar Rejeicao    ${TOKEN_ADMIN}
+
+CT11: Cadastrar produto com token inválido deve ser rejeitado
+    [Documentation]    POST /produtos com token inválido deve retornar 401 com mensagem de acesso negado.
+    [Tags]    produtos    negativo    seguranca    ct11
+    Cadastrar Produto Com Token Invalido E Validar Rejeicao

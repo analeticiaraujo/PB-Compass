@@ -82,3 +82,8 @@ Cenário 15: Cadastrar usuário não administrador com sucesso
     [Tags]    usuarios    smoke
     [Teardown]    Run Keyword And Ignore Error    Deletar Usuario Por ID    ${id_nao_admin}
     ${id_nao_admin}    Cadastrar Usuario Nao Administrador E Validar Criacao
+
+Cenário 16: Cadastrar usuário sem campo email
+    [Documentation]    POST sem 'email' deve retornar 400 com mensagem de campo obrigatório.
+    [Tags]    usuarios    negativo    validacao
+    Cadastrar Usuario Com Campo Ausente E Validar Erro    email    email é obrigatório

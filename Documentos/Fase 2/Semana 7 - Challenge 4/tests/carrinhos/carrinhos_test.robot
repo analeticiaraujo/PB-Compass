@@ -45,3 +45,8 @@ CT11: Cadastrar carrinho com produto inexistente deve ser rejeitado
     [Documentation]    POST /carrinhos com idProduto inválido deve retornar 400.
     [Tags]    carrinhos    negativo    ct11
     Cadastrar Carrinho Com Produto Inexistente E Validar Rejeicao    ${TOKEN_USUARIO}
+
+CT12: Listar todos os carrinhos
+    [Documentation]    GET /carrinhos deve retornar 200 com campos 'quantidade' e 'carrinhos'.
+    [Tags]    carrinhos    smoke    ct12
+    Listar Carrinhos E Validar Estrutura Da Resposta

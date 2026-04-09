@@ -5,6 +5,7 @@ Resource    variaveis.resource
 ${END_LOGIN}                  /login
 ${SENHA_INVALIDA}             senha_errada_xyz
 ${SENHA_EM_BRANCO}            ${EMPTY}
+${MSG_TOKEN_INVALIDO}         Token de acesso ausente, inválido, expirado ou em usuário sem permissão
 ${MSG_LOGIN_SUCESSO}          Login realizado com sucesso
 ${MSG_LOGIN_INVALIDO}         Email e/ou senha inválidos
 ${MSG_LOGIN_SENHA_BRANCO}     Email e/ou senha inválidos
@@ -52,6 +53,12 @@ Autenticar Com Senha Em Branco E Validar Rejeicao
     [Arguments]    ${email}
     ${resposta}    Executar POST Login    ${email}    ${SENHA_EM_BRANCO}    status_esperado=400
     Should Contain    ${resposta.json()}    password
+
+Autenticar Com Senha Invalida E Validar Rejeicao
+    [Documentation]    CT05 — POST /login com senha incorreta (não vazia) deve retornar 401.
+    [Arguments]    ${email}
+    ${resposta}    Executar POST Login    ${email}    ${SENHA_INVALIDA}    status_esperado=401
+    Should Be Equal As Strings    ${resposta.json()['message']}    ${MSG_LOGIN_INVALIDO}
 
 Validar Contrato Do Token De Autenticacao
     [Documentation]    CT04 — Valida que o token retornado segue o contrato: campo 'authorization'

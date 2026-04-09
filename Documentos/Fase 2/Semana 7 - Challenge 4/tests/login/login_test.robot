@@ -36,3 +36,8 @@ CT04: Contrato do token de autenticação deve ser válido
     [Documentation]    Token retornado deve ser string não vazia com prefixo Bearer.
     [Tags]    login    contrato    ct04
     Validar Contrato Do Token De Autenticacao    ${EMAIL_LOGIN_TEST}
+
+CT05: Login com senha incorreta deve ser rejeitado
+    [Documentation]    POST /login com senha errada (não vazia) deve retornar 401.
+    [Tags]    login    negativo    ct05
+    Autenticar Com Senha Invalida E Validar Rejeicao    ${EMAIL_LOGIN_TEST}

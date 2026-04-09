@@ -10,10 +10,15 @@ ${PRECO_PRODUTO_PADRAO}       ${99}
 ${DESC_PRODUTO_PADRAO}        Descricao do produto de teste
 ${QTD_PRODUTO_PADRAO}         ${10}
 ${PRECO_NEGATIVO}             ${-1}
+${QTD_ZERO}                   ${0}
+${QTD_NEGATIVA}               ${-1}
+${TOKEN_INVALIDO}             Bearer token.invalido.xyz
 ${MSG_PRODUTO_CRIADO}         Cadastro realizado com sucesso
 ${MSG_PRODUTO_DUPLICADO}      Já existe produto com esse nome
 ${MSG_PRECO_INVALIDO}         preco deve ser um número positivo
 ${MSG_DESC_OBRIGATORIA}       descricao é obrigatório
+${MSG_QTD_INVALIDA}           quantidade deve ser um número inteiro
+${MSG_TOKEN_INVALIDO}         Token de acesso ausente, inválido, expirado ou em usuário sem permissão
 
 *** Keywords ***
 # ─── HELPERS PRIVADOS ────────────────────────────────────────────────────────
@@ -106,6 +111,29 @@ Cadastrar Produto Sem Descricao E Validar Rejeicao
     Remove From Dictionary    ${body}    descricao
     ${resposta}    Executar POST Produto    ${body}    ${token}    status_esperado=400
     Should Be Equal As Strings    ${resposta.json()['descricao']}    ${MSG_DESC_OBRIGATORIA}
+
+Cadastrar Produto Com Quantidade Zero E Validar Rejeicao
+    [Documentation]    CT09 — POST /produtos com quantidade=0 deve retornar 400.
+    [Arguments]    ${token}
+    ${nome}    Gerar Nome De Produto Unico
+    ${body}    Criar Body de Produto    nome=${nome}    quantidade=${QTD_ZERO}
+    ${resposta}    Executar POST Produto    ${body}    ${token}    status_esperado=400
+    Should Be Equal As Strings    ${resposta.json()['quantidade']}    ${MSG_QTD_INVALIDA}
+
+Cadastrar Produto Com Quantidade Negativa E Validar Rejeicao
+    [Documentation]    CT10 — POST /produtos com quantidade negativa deve retornar 400.
+    [Arguments]    ${token}
+    ${nome}    Gerar Nome De Produto Unico
+    ${body}    Criar Body de Produto    nome=${nome}    quantidade=${QTD_NEGATIVA}
+    ${resposta}    Executar POST Produto    ${body}    ${token}    status_esperado=400
+    Should Be Equal As Strings    ${resposta.json()['quantidade']}    ${MSG_QTD_INVALIDA}
+
+Cadastrar Produto Com Token Invalido E Validar Rejeicao
+    [Documentation]    CT11 — POST /produtos com token inválido deve retornar 401.
+    ${nome}    Gerar Nome De Produto Unico
+    ${body}    Criar Body de Produto    nome=${nome}
+    ${resposta}    Executar POST Produto    ${body}    ${TOKEN_INVALIDO}    status_esperado=401
+    Should Be Equal As Strings    ${resposta.json()['message']}    ${MSG_TOKEN_INVALIDO}
 
 Validar Contrato Da Lista De Produtos
     [Documentation]    Percorre cada item de GET /produtos e valida os tipos de cada campo.

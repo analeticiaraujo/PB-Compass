@@ -205,6 +205,7 @@ Deletar Usuario Com ID Inexistente E Validar Mensagem
 
 Cadastrar Usuario Com Campo Ausente E Validar Erro
     [Documentation]    POST sem um campo obrigatório e valida a mensagem de erro específica do campo.
+    ...                 Cobre: nome, password, administrador e email.
     [Arguments]    ${campo_omitido}    ${mensagem_esperada}
     ${massa}    Gerar Massa de Dados Dinâmica
     ${body}    Criar Body de Usuario    email=${massa}[email]
