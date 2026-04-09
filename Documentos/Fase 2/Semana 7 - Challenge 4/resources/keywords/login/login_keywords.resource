@@ -1,15 +1,15 @@
 *** Settings ***
-Resource    variaveis.resource
+Resource    ../../variables/global/global_vars.resource
 
 *** Variables ***
-${END_LOGIN}                  /login
-${SENHA_INVALIDA}             senha_errada_xyz
-${SENHA_EM_BRANCO}            ${EMPTY}
-${MSG_TOKEN_INVALIDO}         Token de acesso ausente, inválido, expirado ou em usuário sem permissão
-${MSG_LOGIN_SUCESSO}          Login realizado com sucesso
-${MSG_LOGIN_INVALIDO}         Email e/ou senha inválidos
-${MSG_LOGIN_SENHA_BRANCO}     Email e/ou senha inválidos
-${PREFIXO_TOKEN}              Bearer
+${END_LOGIN}               /login
+${SENHA_INVALIDA}          senha_errada_xyz
+${SENHA_EM_BRANCO}         ${EMPTY}
+${MSG_TOKEN_INVALIDO}      Token de acesso ausente, inválido, expirado ou em usuário sem permissão
+${MSG_LOGIN_SUCESSO}       Login realizado com sucesso
+${MSG_LOGIN_INVALIDO}      Email e/ou senha inválidos
+${MSG_LOGIN_SENHA_BRANCO}  Email e/ou senha inválidos
+${PREFIXO_TOKEN}           Bearer
 
 *** Keywords ***
 # ─── HELPERS PRIVADOS ────────────────────────────────────────────────────────
@@ -35,7 +35,7 @@ Executar POST Login
 # ─── KEYWORDS DE TESTE ───────────────────────────────────────────────────────
 
 Autenticar Usuario E Retornar Token
-    [Documentation]    CT01 — POST /login com credenciais válidas. Retorna o bearer token.
+    [Documentation]    POST /login com credenciais válidas. Retorna o bearer token.
     [Arguments]    ${email}    ${password}=${SENHA_PADRAO}
     ${resposta}    Executar POST Login    ${email}    ${password}
     Should Be Equal As Strings    ${resposta.json()['message']}    ${MSG_LOGIN_SUCESSO}
@@ -43,25 +43,25 @@ Autenticar Usuario E Retornar Token
     RETURN    ${resposta.json()['authorization']}
 
 Autenticar Com Email Invalido E Validar Rejeicao
-    [Documentation]    CT02 — POST /login com e-mail inválido deve retornar 401.
+    [Documentation]    POST /login com e-mail inválido deve retornar 401.
     [Arguments]    ${email_invalido}=nao_existe@fake.com
     ${resposta}    Executar POST Login    ${email_invalido}    ${SENHA_PADRAO}    status_esperado=401
     Should Be Equal As Strings    ${resposta.json()['message']}    ${MSG_LOGIN_INVALIDO}
 
 Autenticar Com Senha Em Branco E Validar Rejeicao
-    [Documentation]    CT03 — POST /login com senha vazia deve retornar 400.
+    [Documentation]    POST /login com senha vazia deve retornar 400.
     [Arguments]    ${email}
     ${resposta}    Executar POST Login    ${email}    ${SENHA_EM_BRANCO}    status_esperado=400
     Should Contain    ${resposta.json()}    password
 
 Autenticar Com Senha Invalida E Validar Rejeicao
-    [Documentation]    CT05 — POST /login com senha incorreta (não vazia) deve retornar 401.
+    [Documentation]    POST /login com senha incorreta (não vazia) deve retornar 401.
     [Arguments]    ${email}
     ${resposta}    Executar POST Login    ${email}    ${SENHA_INVALIDA}    status_esperado=401
     Should Be Equal As Strings    ${resposta.json()['message']}    ${MSG_LOGIN_INVALIDO}
 
 Validar Contrato Do Token De Autenticacao
-    [Documentation]    CT04 — Valida que o token retornado segue o contrato: campo 'authorization'
+    [Documentation]    Valida que o token retornado segue o contrato: campo 'authorization'
     ...                 presente, não vazio e com prefixo Bearer.
     [Arguments]    ${email}    ${password}=${SENHA_PADRAO}
     ${resposta}    Executar POST Login    ${email}    ${password}

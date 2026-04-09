@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation     Testes de autenticação do endpoint /login — ServeRest
-Resource          ../../resources/usuarios_keywords.resource
-Resource          ../../resources/login_keywords.resource
+Resource          ../../resources/keywords/usuarios/usuarios_keywords.resource
+Resource          ../../resources/keywords/login/login_keywords.resource
 Suite Setup       Preparar Suite De Login
 Suite Teardown    Limpar Usuario Criado
 

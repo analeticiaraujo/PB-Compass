@@ -3,6 +3,7 @@ Library    RequestsLibrary
 Library    String
 Library    Collections
 Library    FakerLibrary    locale=pt_BR
+Resource   ../../variables/global/global_vars.resource
 
 *** Keywords ***
 # ─── SESSÃO HTTP ─────────────────────────────────────────────────────────────
@@ -23,12 +24,12 @@ Gerar Massa de Dados Dinâmica
     [Documentation]    Usa FakerLibrary para gerar nome, e-mail e senha únicos por execução.
     ...                 Retorna um dicionário com as chaves: nome, email, password.
     ...                 Seguro para execução paralela — cada chamada gera valores distintos.
-    ${nome}       First Name
-    ${sobrenome}  Last Name
+    ${nome}             First Name
+    ${sobrenome}        Last Name
     ${nome_completo}    Set Variable    ${nome} ${sobrenome}
-    ${uuid}       Uuid4
-    ${email}      Set Variable    teste.${uuid}@emailtest.com
-    ${password}   Password    length=12    special_chars=False    digits=True    upper_case=True
+    ${uuid}             Uuid4
+    ${email}            Set Variable    teste.${uuid}@emailtest.com
+    ${password}         Password    length=12    special_chars=False    digits=True    upper_case=True
     ${massa}    Create Dictionary
     ...    nome=${nome_completo}
     ...    email=${email}

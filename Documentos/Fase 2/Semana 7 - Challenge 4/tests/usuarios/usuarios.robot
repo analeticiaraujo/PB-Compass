@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation     Testes CRUD do endpoint /usuarios — ServeRest
-Resource          ../../resources/usuarios_keywords.resource
+Resource          ../../resources/keywords/usuarios/usuarios_keywords.resource
 Suite Setup       Criar Sessão na ServeRest
 Suite Teardown    Limpar Usuario Criado
 

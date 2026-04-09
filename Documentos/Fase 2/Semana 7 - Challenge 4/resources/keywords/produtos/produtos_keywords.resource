@@ -1,24 +1,24 @@
 *** Settings ***
-Resource    variaveis.resource
-Resource    common.resource
+Resource    ../../variables/global/global_vars.resource
+Resource    ../common/common.resource
 
 *** Variables ***
-${END_PRODUTOS}               /produtos
-${ID_PRODUTO_CRIADO}          ${NONE}
-${NOME_PRODUTO_PADRAO}        Produto Teste Automatizado
-${PRECO_PRODUTO_PADRAO}       ${99}
-${DESC_PRODUTO_PADRAO}        Descricao do produto de teste
-${QTD_PRODUTO_PADRAO}         ${10}
-${PRECO_NEGATIVO}             ${-1}
-${QTD_ZERO}                   ${0}
-${QTD_NEGATIVA}               ${-1}
-${TOKEN_INVALIDO}             Bearer token.invalido.xyz
-${MSG_PRODUTO_CRIADO}         Cadastro realizado com sucesso
-${MSG_PRODUTO_DUPLICADO}      Já existe produto com esse nome
-${MSG_PRECO_INVALIDO}         preco deve ser um número positivo
-${MSG_DESC_OBRIGATORIA}       descricao é obrigatório
-${MSG_QTD_INVALIDA}           quantidade deve ser um número inteiro
-${MSG_TOKEN_INVALIDO}         Token de acesso ausente, inválido, expirado ou em usuário sem permissão
+${END_PRODUTOS}            /produtos
+${ID_PRODUTO_CRIADO}       ${NONE}
+${NOME_PRODUTO_PADRAO}     Produto Teste Automatizado
+${PRECO_PRODUTO_PADRAO}    ${99}
+${DESC_PRODUTO_PADRAO}     Descricao do produto de teste
+${QTD_PRODUTO_PADRAO}      ${10}
+${PRECO_NEGATIVO}          ${-1}
+${QTD_ZERO}                ${0}
+${QTD_NEGATIVA}            ${-1}
+${TOKEN_INVALIDO}          Bearer token.invalido.xyz
+${MSG_PRODUTO_CRIADO}      Cadastro realizado com sucesso
+${MSG_PRODUTO_DUPLICADO}   Já existe produto com esse nome
+${MSG_PRECO_INVALIDO}      preco deve ser um número positivo
+${MSG_DESC_OBRIGATORIA}    descricao é obrigatório
+${MSG_QTD_INVALIDA}        quantidade deve ser um número inteiro
+${MSG_TOKEN_INVALIDO}      Token de acesso ausente, inválido, expirado ou em usuário sem permissão
 
 *** Keywords ***
 # ─── HELPERS PRIVADOS ────────────────────────────────────────────────────────
@@ -79,7 +79,7 @@ Listar Produtos E Validar Estrutura Da Resposta
     Should Be True    ${resposta.json()['quantidade']} >= 0
 
 Cadastrar Produto E Validar Criacao
-    [Documentation]    CT05 — POST /produtos com token de admin deve retornar 201 e persistir ID.
+    [Documentation]    POST /produtos com token de admin deve retornar 201 e persistir ID.
     [Arguments]    ${token}
     ${nome}    Gerar Nome De Produto Unico
     ${body}    Criar Body de Produto    nome=${nome}
@@ -90,21 +90,21 @@ Cadastrar Produto E Validar Criacao
     RETURN    ${resposta.json()['_id']}
 
 Cadastrar Produto Com Nome Duplicado E Validar Conflito
-    [Documentation]    CT06 — POST com nome já existente deve retornar 400 com mensagem de conflito.
+    [Documentation]    POST com nome já existente deve retornar 400 com mensagem de conflito.
     [Arguments]    ${token}    ${nome_duplicado}
     ${body}    Criar Body de Produto    nome=${nome_duplicado}
     ${resposta}    Executar POST Produto    ${body}    ${token}    status_esperado=400
     Should Be Equal As Strings    ${resposta.json()['message']}    ${MSG_PRODUTO_DUPLICADO}
 
 Cadastrar Produto Com Preco Negativo E Validar Rejeicao
-    [Documentation]    CT07 — POST com preço negativo deve retornar 400 com mensagem de validação.
+    [Documentation]    POST com preço negativo deve retornar 400 com mensagem de validação.
     [Arguments]    ${token}
     ${body}    Criar Body de Produto    preco=${PRECO_NEGATIVO}
     ${resposta}    Executar POST Produto    ${body}    ${token}    status_esperado=400
     Should Be Equal As Strings    ${resposta.json()['preco']}    ${MSG_PRECO_INVALIDO}
 
 Cadastrar Produto Sem Descricao E Validar Rejeicao
-    [Documentation]    CT08 — POST sem campo 'descricao' deve retornar 400 com mensagem de campo obrigatório.
+    [Documentation]    POST sem campo 'descricao' deve retornar 400 com mensagem de campo obrigatório.
     [Arguments]    ${token}
     ${nome}    Gerar Nome De Produto Unico
     ${body}    Criar Body de Produto    nome=${nome}
@@ -113,7 +113,7 @@ Cadastrar Produto Sem Descricao E Validar Rejeicao
     Should Be Equal As Strings    ${resposta.json()['descricao']}    ${MSG_DESC_OBRIGATORIA}
 
 Cadastrar Produto Com Quantidade Zero E Validar Rejeicao
-    [Documentation]    CT09 — POST /produtos com quantidade=0 deve retornar 400.
+    [Documentation]    POST /produtos com quantidade=0 deve retornar 400.
     [Arguments]    ${token}
     ${nome}    Gerar Nome De Produto Unico
     ${body}    Criar Body de Produto    nome=${nome}    quantidade=${QTD_ZERO}
@@ -121,7 +121,7 @@ Cadastrar Produto Com Quantidade Zero E Validar Rejeicao
     Should Be Equal As Strings    ${resposta.json()['quantidade']}    ${MSG_QTD_INVALIDA}
 
 Cadastrar Produto Com Quantidade Negativa E Validar Rejeicao
-    [Documentation]    CT10 — POST /produtos com quantidade negativa deve retornar 400.
+    [Documentation]    POST /produtos com quantidade negativa deve retornar 400.
     [Arguments]    ${token}
     ${nome}    Gerar Nome De Produto Unico
     ${body}    Criar Body de Produto    nome=${nome}    quantidade=${QTD_NEGATIVA}
@@ -129,7 +129,7 @@ Cadastrar Produto Com Quantidade Negativa E Validar Rejeicao
     Should Be Equal As Strings    ${resposta.json()['quantidade']}    ${MSG_QTD_INVALIDA}
 
 Cadastrar Produto Com Token Invalido E Validar Rejeicao
-    [Documentation]    CT11 — POST /produtos com token inválido deve retornar 401.
+    [Documentation]    POST /produtos com token inválido deve retornar 401.
     ${nome}    Gerar Nome De Produto Unico
     ${body}    Criar Body de Produto    nome=${nome}
     ${resposta}    Executar POST Produto    ${body}    ${TOKEN_INVALIDO}    status_esperado=401

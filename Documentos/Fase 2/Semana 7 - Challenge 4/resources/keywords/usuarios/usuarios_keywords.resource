@@ -1,6 +1,6 @@
 *** Settings ***
-Resource    variaveis.resource
-Resource    common.resource
+Resource    ../../variables/global/global_vars.resource
+Resource    ../common/common.resource
 
 *** Variables ***
 ${NOME_DUPLICADO}            Fulano Replicado

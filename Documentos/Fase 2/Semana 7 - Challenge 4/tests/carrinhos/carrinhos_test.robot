@@ -1,9 +1,9 @@
 *** Settings ***
 Documentation     Testes do endpoint /carrinhos — ServeRest
-Resource          ../../resources/usuarios_keywords.resource
-Resource          ../../resources/login_keywords.resource
-Resource          ../../resources/produtos_keywords.resource
-Resource          ../../resources/carrinhos_keywords.resource
+Resource          ../../resources/keywords/usuarios/usuarios_keywords.resource
+Resource          ../../resources/keywords/login/login_keywords.resource
+Resource          ../../resources/keywords/produtos/produtos_keywords.resource
+Resource          ../../resources/keywords/carrinhos/carrinhos_keywords.resource
 Suite Setup       Preparar Suite De Carrinhos
 Suite Teardown    Limpar Suite De Carrinhos
 

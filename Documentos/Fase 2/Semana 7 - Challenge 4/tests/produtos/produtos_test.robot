@@ -1,8 +1,8 @@
 *** Settings ***
 Documentation     Testes do endpoint /produtos — ServeRest
-Resource          ../../resources/usuarios_keywords.resource
-Resource          ../../resources/login_keywords.resource
-Resource          ../../resources/produtos_keywords.resource
+Resource          ../../resources/keywords/usuarios/usuarios_keywords.resource
+Resource          ../../resources/keywords/login/login_keywords.resource
+Resource          ../../resources/keywords/produtos/produtos_keywords.resource
 Suite Setup       Preparar Suite De Produtos
 Suite Teardown    Limpar Suite De Produtos
 

@@ -1,14 +1,14 @@
 *** Settings ***
-Resource    variaveis.resource
-Resource    common.resource
+Resource    ../../variables/global/global_vars.resource
+Resource    ../common/common.resource
 
 *** Variables ***
-${END_CARRINHOS}              /carrinhos
-${ID_CARRINHO_CRIADO}         ${NONE}
-${ID_PRODUTO_FAKE}            produto_id_inexistente_xyz
-${MSG_CARRINHO_CRIADO}        Cadastro realizado com sucesso
-${MSG_CARRINHO_DUPLICADO}     Não é permitido ter mais de 1 carrinho
-${MSG_PRODUTO_INEXISTENTE}    Produto não encontrado
+${END_CARRINHOS}           /carrinhos
+${ID_CARRINHO_CRIADO}      ${NONE}
+${ID_PRODUTO_FAKE}         produto_id_inexistente_xyz
+${MSG_CARRINHO_CRIADO}     Cadastro realizado com sucesso
+${MSG_CARRINHO_DUPLICADO}  Não é permitido ter mais de 1 carrinho
+${MSG_PRODUTO_INEXISTENTE} Produto não encontrado
 
 *** Keywords ***
 # ─── HELPERS PRIVADOS ────────────────────────────────────────────────────────
@@ -60,7 +60,7 @@ Listar Carrinhos E Validar Estrutura Da Resposta
     Should Be True    ${resposta.json()['quantidade']} >= 0
 
 Cadastrar Carrinho E Validar Criacao
-    [Documentation]    CT09 — POST /carrinhos com produto válido deve retornar 201.
+    [Documentation]    POST /carrinhos com produto válido deve retornar 201.
     [Arguments]    ${token}    ${id_produto}
     ${body}    Criar Body de Carrinho    ${id_produto}
     ${resposta}    Executar POST Carrinho    ${body}    ${token}
@@ -70,14 +70,14 @@ Cadastrar Carrinho E Validar Criacao
     RETURN    ${resposta.json()['_id']}
 
 Cadastrar Segundo Carrinho E Validar Rejeicao
-    [Documentation]    CT10 — POST /carrinhos quando usuário já tem carrinho deve retornar 400.
+    [Documentation]    POST /carrinhos quando usuário já tem carrinho deve retornar 400.
     [Arguments]    ${token}    ${id_produto}
     ${body}    Criar Body de Carrinho    ${id_produto}
     ${resposta}    Executar POST Carrinho    ${body}    ${token}    status_esperado=400
     Should Be Equal As Strings    ${resposta.json()['message']}    ${MSG_CARRINHO_DUPLICADO}
 
 Cadastrar Carrinho Com Produto Inexistente E Validar Rejeicao
-    [Documentation]    CT11 — POST /carrinhos com idProduto inexistente deve retornar 400.
+    [Documentation]    POST /carrinhos com idProduto inexistente deve retornar 400.
     [Arguments]    ${token}
     ${body}    Criar Body de Carrinho    ${ID_PRODUTO_FAKE}
     ${resposta}    Executar POST Carrinho    ${body}    ${token}    status_esperado=400
