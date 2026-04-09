@@ -63,3 +63,10 @@ CT11: Cadastrar produto com token inválido deve ser rejeitado
     [Documentation]    POST /produtos com token inválido deve retornar 401 com mensagem de acesso negado.
     [Tags]    produtos    negativo    seguranca    ct11
     Cadastrar Produto Com Token Invalido E Validar Rejeicao
+
+CT04: Validar contrato do schema de GET /produtos
+    [Documentation]    Percorre todos os itens retornados por GET /produtos e valida os tipos
+    ...                 de cada campo: nome (str), preco (int/float), descricao (str), quantidade (int).
+    ...                 Falha com mensagem descritiva se qualquer campo quebrar o contrato.
+    [Tags]    produtos    contrato    ct04
+    Validar Contrato Da Lista De Produtos
