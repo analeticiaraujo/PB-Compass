@@ -3,12 +3,12 @@ Resource    ../../variables/global/global_vars.resource
 Resource    ../common/common.resource
 
 *** Variables ***
-${END_CARRINHOS}           /carrinhos
-${ID_CARRINHO_CRIADO}      ${NONE}
-${ID_PRODUTO_FAKE}         produto_id_inexistente_xyz
-${MSG_CARRINHO_CRIADO}     Cadastro realizado com sucesso
-${MSG_CARRINHO_DUPLICADO}  Não é permitido ter mais de 1 carrinho
-${MSG_PRODUTO_INEXISTENTE} Produto não encontrado
+${END_CARRINHOS}            /carrinhos
+${ID_CARRINHO_CRIADO}       ${NONE}
+${ID_PRODUTO_FAKE}          produto_id_inexistente_xyz
+${MSG_CARRINHO_CRIADO}      Cadastro realizado com sucesso
+${MSG_CARRINHO_DUPLICADO}   Não é permitido ter mais de 1 carrinho
+${MSG_PRODUTO_INEXISTENTE}  Produto não encontrado
 
 *** Keywords ***
 # ─── HELPERS PRIVADOS ────────────────────────────────────────────────────────
