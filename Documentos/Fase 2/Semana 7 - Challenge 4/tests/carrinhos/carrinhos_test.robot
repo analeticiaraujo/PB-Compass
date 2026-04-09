@@ -28,25 +28,25 @@ Limpar Suite De Carrinhos
     Limpar Usuario Criado
 
 *** Test Cases ***
-CT09: Cadastrar carrinho com produto válido
+CT30: Cadastrar carrinho com produto válido
     [Documentation]    POST /carrinhos com produto existente deve retornar 201.
-    [Tags]    carrinhos    smoke    crud    ct09
+    [Tags]    carrinhos    smoke    crud    ct30
     [Teardown]    Deletar Carrinho Do Usuario    ${TOKEN_USUARIO}
     Cadastrar Carrinho E Validar Criacao    ${TOKEN_USUARIO}    ${ID_PRODUTO_CT}
 
-CT10: Cadastrar segundo carrinho para o mesmo usuário deve ser rejeitado
+CT31: Cadastrar segundo carrinho para o mesmo usuário deve ser rejeitado
     [Documentation]    POST /carrinhos quando usuário já possui carrinho deve retornar 400.
-    [Tags]    carrinhos    negativo    ct10
+    [Tags]    carrinhos    negativo    ct31
     [Setup]     Cadastrar Carrinho E Validar Criacao    ${TOKEN_USUARIO}    ${ID_PRODUTO_CT}
     [Teardown]  Deletar Carrinho Do Usuario    ${TOKEN_USUARIO}
     Cadastrar Segundo Carrinho E Validar Rejeicao    ${TOKEN_USUARIO}    ${ID_PRODUTO_CT}
 
-CT11: Cadastrar carrinho com produto inexistente deve ser rejeitado
+CT32: Cadastrar carrinho com produto inexistente deve ser rejeitado
     [Documentation]    POST /carrinhos com idProduto inválido deve retornar 400.
-    [Tags]    carrinhos    negativo    ct11
+    [Tags]    carrinhos    negativo    ct32
     Cadastrar Carrinho Com Produto Inexistente E Validar Rejeicao    ${TOKEN_USUARIO}
 
-CT12: Listar todos os carrinhos
+CT33: Listar todos os carrinhos
     [Documentation]    GET /carrinhos deve retornar 200 com campos 'quantidade' e 'carrinhos'.
-    [Tags]    carrinhos    smoke    ct12
+    [Tags]    carrinhos    smoke    ct33
     Listar Carrinhos E Validar Estrutura Da Resposta

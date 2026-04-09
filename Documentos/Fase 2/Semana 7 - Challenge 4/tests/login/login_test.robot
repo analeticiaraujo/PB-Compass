@@ -16,28 +16,28 @@ Preparar Suite De Login
     Set Suite Variable    ${EMAIL_LOGIN_TEST}    ${EMAIL_TEST}
 
 *** Test Cases ***
-CT01: Login com credenciais válidas deve retornar token
+CT17: Login com credenciais válidas deve retornar token
     [Documentation]    POST /login com e-mail e senha válidos deve retornar 200 e bearer token.
-    [Tags]    login    smoke    ct01
+    [Tags]    login    smoke    ct17
     ${token}    Autenticar Usuario E Retornar Token    ${EMAIL_LOGIN_TEST}
     Should Not Be Empty    ${token}
 
-CT02: Login com e-mail inválido deve ser rejeitado
+CT18: Login com e-mail inválido deve ser rejeitado
     [Documentation]    POST /login com e-mail inexistente deve retornar 401.
-    [Tags]    login    negativo    ct02
+    [Tags]    login    negativo    ct18
     Autenticar Com Email Invalido E Validar Rejeicao
 
-CT03: Login com senha em branco deve ser rejeitado
+CT19: Login com senha em branco deve ser rejeitado
     [Documentation]    POST /login com senha vazia deve retornar 400 com erro no campo password.
-    [Tags]    login    negativo    ct03
+    [Tags]    login    negativo    ct19
     Autenticar Com Senha Em Branco E Validar Rejeicao    ${EMAIL_LOGIN_TEST}
 
-CT04: Contrato do token de autenticação deve ser válido
+CT20: Contrato do token de autenticação deve ser válido
     [Documentation]    Token retornado deve ser string não vazia com prefixo Bearer.
-    [Tags]    login    contrato    ct04
+    [Tags]    login    contrato    ct20
     Validar Contrato Do Token De Autenticacao    ${EMAIL_LOGIN_TEST}
 
-CT05: Login com senha incorreta deve ser rejeitado
+CT21: Login com senha incorreta deve ser rejeitado
     [Documentation]    POST /login com senha errada (não vazia) deve retornar 401.
-    [Tags]    login    negativo    ct05
+    [Tags]    login    negativo    ct21
     Autenticar Com Senha Invalida E Validar Rejeicao    ${EMAIL_LOGIN_TEST}
