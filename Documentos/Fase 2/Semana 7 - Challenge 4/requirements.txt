@@ -1,5 +1,27 @@
+# ─── CORE ─────────────────────────────────────────────────────────────────────
+# Motor principal do Robot Framework
 robotframework>=7.0
+
+# ─── BIBLIOTECAS HTTP ─────────────────────────────────────────────────────────
+# Wrapper Robot para a biblioteca requests (Create Session, GET/POST/PUT/DELETE On Session)
 robotframework-requests>=0.9.7
+# Dependências diretas do robotframework-requests
+requests>=2.31.0
+urllib3>=2.0.0
+
+# ─── GERAÇÃO DE MASSA DE DADOS ────────────────────────────────────────────────
+# Wrapper Robot para o Faker (First Name, Last Name, Uuid4, Password, Word)
 robotframework-faker>=5.0.0
-robotframework-pabot>=2.18.0
+# Engine Python do Faker — deve ser fixada para garantir reprodutibilidade de locale pt_BR
 Faker>=24.0.0
+
+# ─── EXECUÇÃO PARALELA ────────────────────────────────────────────────────────
+# Pabot — executor paralelo de suites Robot Framework (pabot --processes N)
+robotframework-pabot>=2.18.0
+
+# ─── BIBLIOTECAS BUILT-IN UTILIZADAS ─────────────────────────────────────────
+# String, Collections e BuiltIn já fazem parte do robotframework — não precisam ser instaladas
+# separadamente. Listadas aqui apenas para rastreabilidade de uso no projeto:
+#   - String      → Convert To Lower Case (common.resource)
+#   - Collections → Create Dictionary, Create List, Remove From Dictionary (keywords/*.resource)
+#   - BuiltIn     → Should Be Equal, Should Contain, Log, Set Variable, Evaluate, etc.

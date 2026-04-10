@@ -1,3 +1,44 @@
+# ─── ROBOT FRAMEWORK — RESULTADOS ────────────────────────────────────────────
+# Pasta completa de resultados gerados pelo robot e pabot
+results/
+!results/.gitkeep
+
+# Arquivos de resultado soltos na raiz (execuções manuais fora de results/)
 log.html
 output.xml
 report.html
+debug.log
+
+# ─── PABOT — EXECUÇÃO PARALELA ────────────────────────────────────────────────
+.pabotsuitenames
+pabot_results/
+
+# ─── PYTHON — CACHE E COMPILADOS ─────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# ─── AMBIENTES VIRTUAIS ───────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+.env/
+
+# ─── IDEs E EDITORES ──────────────────────────────────────────────────────────
+# VS Code
+.vscode/
+
+# PyCharm / IntelliJ
+.idea/
+*.iml
+
+# ─── SISTEMA OPERACIONAL ──────────────────────────────────────────────────────
+# Windows
+Thumbs.db
+desktop.ini
+
+# macOS
+.DS_Store
