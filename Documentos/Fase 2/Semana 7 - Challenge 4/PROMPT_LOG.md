@@ -1,25 +1,66 @@
 <<<<<<< HEAD
-# 🤖 Prompt Log - Challenge 03
+# 🤖 Prompt Log - Challenge 04
 =======
-# Prompt Log - Challenge 03
->>>>>>> eccc812d8e489ebaea0fcc27a5bc7fb45dc37e64
+# Prompt Log - Challenge 04
 
 Este documento registra a interação com GenAI para a evolução do plano de testes e automação.
 
 ---
 
-## Estrutura de Registro (Exemplo)
-> **Objetivo:** [Ex: Gerar cenários negativos para /usuarios]
-> **Contexto:** [Ex: Endpoint POST /usuarios, campos nome, email, password, administrador]
-> **Prompt Final:** [O texto que você enviou para a IA]
-> **Resposta da IA:** [Resumo do que ela entregou]
-> **Ajustes Manuais:** [O que você corrigiu ou descartou para evitar alucinação]
-> **Critérios de Validação:** [Como você garantiu que o teste é válido]
+## Estrutura de Registro (Resumo)
+Registros de Interação
+Log #1 ao #3: Arquitetura e Code Review
+Objetivo: Definir a árvore de diretórios e auditar a qualidade do código inicial.
+Contexto: Projeto Robot Framework para API ServeRest; necessidade de separar testes de keywords.
+Prompt Final: "Atue como Arquiteto de Soluções. Preciso da estrutura de pastas... e realize um Code Review focado em qualidade e manutenibilidade."
+Resposta da IA: Sugeriu estrutura tests/ e resources/, apontou dependência de estado entre testes (nota 6.5/10) e sugeriu Setups atômicos.
+Ajustes Manuais: Implementação de Set Suite Variable para capturar IDs e Tokens, garantindo que os testes não falhassem em cascata.
+Critérios de Validação: Execução individual de cada caso de teste sem depender da ordem da suíte.
+
+Log #4 ao #7: Expansão de Cobertura e Contrato
+Objetivo: Automatizar os endpoints de Login, Produtos e Carrinhos com testes de contrato.
+Contexto: Endpoints POST/GET /login, /produtos e /carrinhos.
+Prompt Final: "Gere Keywords de teste para os endpoints /login, /produtos e /carrinhos... crie um Teste de Contrato robusto usando Evaluate."
+Resposta da IA: Gerou recursos modulares e uma lógica de validação de tipos Python (isinstance) para o contrato de produtos.
+Ajustes Manuais: Ajuste na validação de tipos para aceitar int ou float no campo preço, evitando falsos negativos.
+Critérios de Validação: Comparação do JSON retornado pela API com os tipos esperados via loop FOR.
+
+Log #8: Massa Dinâmica e Execução Paralela
+Objetivo: Integrar FakerLibrary e configurar execução via Pabot.
+Contexto: Necessidade de dados únicos para evitar conflitos em testes simultâneos.
+Prompt Final: "Integre a FakerLibrary... Substitua valores fixos por dados gerados... Explique como rodar com o Pabot."
+Resposta da IA: Criou o common.resource, integrou UUID4 para e-mails e forneceu comandos do Pabot.
+Ajustes Manuais: Centralização da criação de sessão no common.resource para que todas as threads do Pabot utilizem a mesma base de conexão.
+Critérios de Validação: Execução de pabot --processes 2 resultando em 100% de sucesso sem colisões de e-mail.
+
+Log #9 ao #10: Debug e Recuperação de Cenários
+Objetivo: Corrigir erros de recursão e restaurar testes de contrato perdidos.
+Contexto: Erro "Recursive execution stopped" e perda de arquivos durante refatoração.
+Prompt Final: (Input de erro do console) + "Meu cenário de teste de contrato sumiu... gere novamente."
+Resposta da IA: Identificou que uma keyword chamava a si mesma e recriou o arquivo contrato_test.robot.
+Ajustes Manuais: Correção do nome da keyword em produtos_keywords.resource para evitar o conflito de nomes (shadowing).
+Critérios de Validação: Suítes voltaram a rodar sem erros de stack overflow.
+
+Log #11 ao #13: Auditoria de Compliance e Unificação
+Objetivo: Validar requisitos do desafio e unificar suítes de teste.
+Contexto: Comparação estrita com o Swagger; fusão de testes de contrato e funcionais.
+Prompt Final: "Atue como QA Lead... compare com os requisitos do Desafio... mova o CT04 para dentro de produtos_test.robot."
+Resposta da IA: Identificou lacunas (estoque, email obrigatório) e realizou a fusão de arquivos.
+Ajustes Manuais: Revisão das mensagens de erro para incluir/remover acentos conforme o comportamento real da API ServeRest.
+Critérios de Validação: Conferência da meta de 10+ checks (total de 16 validados na auditoria).
+
+Log #14 ao #15: Padronização e Reorganização Final
+Objetivo: Renumerar todos os CTs para 01-33 e organizar pastas por endpoint.
+Contexto: Organização final do projeto para entrega; padrão resources/keywords/endpoint.
+Prompt Final: "Padronize a numeração global... reorganize fisicamente os arquivos... ajuste todos os imports internos."
+Resposta da IA: Gerou o índice CT01-CT33 e atualizou os caminhos relativos (../../).
+Ajustes Manuais: Renomeação de variaveis.resource para global_vars.resource para melhor semântica.
+Critérios de Validação: Execução final de toda a árvore de diretórios via CLI garantindo que nenhum import foi quebrado.
 
 ---
 
 <<<<<<< HEAD
-## Log #1: [Título do que você vai fazer primeiro]
+## Log #1: [Analisar a estrutura das pastas do projeto]
 *Atue exclusivamente como Arquiteto de Soluções. Preciso da estrutura de pastas para o projeto Serverest em Robot Framework, mas NÃO gere novos casos de teste agora.
 
 O que eu preciso:
