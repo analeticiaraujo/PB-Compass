@@ -109,19 +109,22 @@ Atualizar Dados Do Usuario E Validar Confirmacao
 
 Deletar Usuario Existente E Validar Confirmacao
     [Documentation]    DELETE /usuarios/{id} e valida mensagem de exclusão no corpo.
+    ...                 Persiste o ID em ${ID_USUARIO_DELETADO} para validação pós-delete.
     ${resposta}    DELETE On Session
     ...    alias=${ALIAS}
     ...    url=/usuarios/${ID_USUARIO_CRIADO}
     ...    expected_status=200
     ...    verify=${False}
     Should Be Equal As Strings    ${resposta.json()['message']}    Registro excluído com sucesso
+    Set Suite Variable    ${ID_USUARIO_DELETADO}    ${ID_USUARIO_CRIADO}
     Set Suite Variable    ${ID_USUARIO_CRIADO}    ${NONE}
 
 Confirmar Que Usuario Deletado Retorna Nao Encontrado
     [Documentation]    GET no ID deletado deve retornar 400 com mensagem 'Usuário não encontrado'.
+    ...                 Usa ${ID_USUARIO_DELETADO} preservado pelo CT05.
     ${resposta}    GET On Session
     ...    alias=${ALIAS}
-    ...    url=/usuarios/${ID_USUARIO_CRIADO}
+    ...    url=/usuarios/${ID_USUARIO_DELETADO}
     ...    expected_status=400
     ...    verify=${False}
     Should Be Equal As Strings    ${resposta.json()['message']}    Usuário não encontrado

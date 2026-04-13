@@ -5,7 +5,7 @@ Resource    ../../variables/global/global_vars.resource
 ${END_LOGIN}               /login
 ${SENHA_INVALIDA}          senha_errada_xyz
 ${SENHA_EM_BRANCO}         ${EMPTY}
-${MSG_TOKEN_INVALIDO}      Token de acesso ausente, inválido, expirado ou em usuário sem permissão
+${MSG_TOKEN_INVALIDO}      Token de acesso ausente, inválido, expirado ou usuário do token não existe mais
 ${MSG_LOGIN_SUCESSO}       Login realizado com sucesso
 ${MSG_LOGIN_INVALIDO}      Email e/ou senha inválidos
 ${MSG_LOGIN_SENHA_BRANCO}  Email e/ou senha inválidos
