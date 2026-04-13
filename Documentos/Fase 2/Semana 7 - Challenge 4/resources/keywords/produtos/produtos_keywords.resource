@@ -18,7 +18,7 @@ ${MSG_PRODUTO_DUPLICADO}   Já existe produto com esse nome
 ${MSG_PRECO_INVALIDO}      preco deve ser um número positivo
 ${MSG_DESC_OBRIGATORIA}    descricao é obrigatório
 ${MSG_QTD_INVALIDA}        quantidade deve ser um número inteiro
-${MSG_TOKEN_INVALIDO}      Token de acesso ausente, inválido, expirado ou em usuário sem permissão
+${MSG_TOKEN_INVALIDO}      Token de acesso ausente, inválido, expirado ou usuário do token não existe mais
 
 *** Keywords ***
 # ─── HELPERS PRIVADOS ────────────────────────────────────────────────────────
